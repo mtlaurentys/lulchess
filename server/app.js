@@ -3,10 +3,9 @@
  */
 
 const EventEmitter = require('events');
-
-const server = require('http');
+const http = require('http');
+const server = http.createServer();
 const MatchManager = require('./match_manager');
+
 match_manager = new MatchManager;
-server.Listen(3000);
-EventEmitter.on('create_match', () => {console.log("funcionou")});
-EventEmitter.on('connect', () => {console.log("conectou")});
+server.listen(3001);
