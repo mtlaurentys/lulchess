@@ -26,5 +26,5 @@ wsServer.on('request', function(request) {
   const connection = request.accept(null, request.origin);
   clients[userID] = connection;
   console.log('connected: ' + userID + ' in ' + Object.getOwnPropertyNames(clients));
-  connection.send(new Int8Array([1,2]));
+  connection.send(new Int8Array([1,2,3,4]));
 });

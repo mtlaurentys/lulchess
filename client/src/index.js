@@ -1,27 +1,11 @@
-import React, { Component } from 'react';
-import { w3cwebsocket as W3CWebSocket } from "websocket";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
 
-const client = new W3CWebSocket('ws://127.0.0.1:8000');
-
-class App extends Component {
-  componentWillMount() {
-    client.onopen = () => {
-      console.log('WebSocket Client Connected');
-    };
-    client.onmessage = (message) => {
-      console.log("RECEBEU");
-      console.log(message);
-    };
-  }
-
-  render() {
-    return (
-      <div>
-        Practical Intro To WebSockets.
-      </div>
-
-    );
-  }
-}
-
-export default App;
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
