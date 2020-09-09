@@ -1,0 +1,19 @@
+#roomPanel {
+  border-style: solid;
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 3%;
+}
+
+.sel1 {
+  background-color: gray;
+}
+
+.sel0 {
+  background-color: white;
+}
+
+button {
+  font-size: 2em;
+  padding: 1%;
+}

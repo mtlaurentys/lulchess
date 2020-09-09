@@ -1,13 +1,17 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import NavBar from "./components/Navbar";
+import RoomPanel from "./components/RoomPanel";
 
-const client = new W3CWebSocket('ws://127.0.0.1:8000');
+const client = new W3CWebSocket("ws://127.0.0.1:8000");
 
 class App extends React.Component {
+  state = {};
+
   componentDidMount() {
     client.onopen = () => {
-      console.log('WebSocket Client Connected');
+      console.log("WebSocket Client Connected");
     };
     client.onmessage = (message) => {
       console.log(message.data);
@@ -17,19 +21,9 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">=
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <NavBar id="navBar"></NavBar>
+        <RoomPanel id="roomPanel"></RoomPanel>
+        <span>App</span>
       </div>
     );
   }
