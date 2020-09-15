@@ -1,0 +1,20 @@
+.numPlayerBox {
+  font-size: 2em;
+  width: 1.5em;
+  text-align: center;
+}
+
+.oSel0 {
+  border-left-style: none;
+  background-color: white;
+  margin: 1%;
+}
+
+.oSel-2,
+.oSel-1,
+.oSel1,
+.oSel2,
+.oSel3 {
+  background-color: blue;
+  margin: 1%;
+}

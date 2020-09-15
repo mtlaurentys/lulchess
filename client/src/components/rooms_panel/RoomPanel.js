@@ -1,14 +1,15 @@
-import React from "react";
-import MatchCreationMenu from "./MatchCreationMenu";
+import React, { Fragment } from "react";
+import MatchCreationMenu from "./match_creation/MatchCreationMenu";
 import "./RoomPanel.css";
 
 class RoomPanel extends React.Component {
   state = {
     clicked: 0,
   };
-  render() {
+
+  drawTaskSelector() {
     return (
-      <div id="roomPanel">
+      <Fragment>
         <button
           id="createMatch"
           className={"sel" + (1 - this.state.clicked)}
@@ -27,7 +28,19 @@ class RoomPanel extends React.Component {
         >
           View Lobby
         </button>
-        <MatchCreationMenu />
+      </Fragment>
+    );
+  }
+
+  drawMenu() {
+    if (this.state.clicked === 0) return <MatchCreationMenu />;
+  }
+
+  render() {
+    return (
+      <div id="roomPanel">
+        {this.drawTaskSelector()}
+        {this.drawMenu()}
       </div>
     );
   }

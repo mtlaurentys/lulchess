@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
-import NavBar from "./components/Navbar";
-import RoomPanel from "./components/RoomPanel";
+import NavBar from "./components/navbar/Navbar";
+import RoomPanel from "./components/rooms_panel/RoomPanel";
 
 const client = new W3CWebSocket("ws://127.0.0.1:8000");
 
@@ -23,7 +23,6 @@ class App extends React.Component {
       <div className="App">
         <NavBar id="navBar"></NavBar>
         <RoomPanel id="roomPanel"></RoomPanel>
-        <span>App</span>
       </div>
     );
   }

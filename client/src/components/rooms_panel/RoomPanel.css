@@ -3,6 +3,15 @@
   width: 50%;
   margin: 0 auto;
   margin-top: 3%;
+  padding-top: 2%;
+}
+
+#createMatch {
+  margin-right: 1%;
+}
+
+#viewLobby {
+  margin-left: 1%;
 }
 
 .sel1 {
