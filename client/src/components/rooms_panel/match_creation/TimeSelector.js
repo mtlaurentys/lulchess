@@ -1,37 +1,47 @@
 import React from "react";
 import "./TimeSelector.css";
 
-class TimeSelector extends React.Component {
-  state = {};
+const BaseTimeFormats = {
+  t3: "3-0-3-0",
+  t5: "5-0-5-0",
+  t10: "10-0-10-0",
+};
 
-  componentDidMount() {
-    this.setState({ selected: 0 });
+class TimeSelector extends React.Component {
+  constructor(props) {
+    super(props);
+    this.changeCallback = props.callback;
   }
 
   drawOptionSelector() {
+    let selected = 3;
+    let cur = this.props.clock;
+    if (cur === BaseTimeFormats.t3) selected = 0;
+    else if (cur === BaseTimeFormats.t5) selected = 1;
+    else if (cur === BaseTimeFormats.t10) selected = 2;
     return (
       <div>
         <button
           onClick={() => {
-            this.setState({ selected: 0 });
+            this.changeCallback(BaseTimeFormats.t3);
           }}
-          className={"oSel" + this.state.selected}
+          className={"oSel" + selected}
         >
           3'
         </button>
         <button
           onClick={() => {
-            this.setState({ selected: 1 });
+            this.changeCallback(BaseTimeFormats.t5);
           }}
-          className={"oSel" + (1 - this.state.selected)}
+          className={"oSel" + (1 - selected)}
         >
           5'
         </button>
         <button
           onClick={() => {
-            this.setState({ selected: 2 });
+            this.changeCallback(BaseTimeFormats.t10);
           }}
-          className={"oSel" + (2 - this.state.selected)}
+          className={"oSel" + (2 - selected)}
         >
           10'
         </button>
@@ -39,7 +49,7 @@ class TimeSelector extends React.Component {
           onClick={() => {
             this.setState({ selected: 3 });
           }}
-          className={"oSel" + (3 - this.state.selected)}
+          className={"oSel" + (3 - selected)}
         >
           CUSTOM
         </button>

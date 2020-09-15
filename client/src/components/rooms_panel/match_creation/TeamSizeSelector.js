@@ -1,46 +1,49 @@
 import React from "react";
 import "./TeamSizeSelector.css";
 
-export const option_selected = {
-  m1v1: 0,
-  m2v2: 1,
-  m3v3: 2,
-  custom: 3,
+const BaseTeamSizes = {
+  m1v1: "1-1",
+  m2v2: "2-2",
+  m3v3: "3-3",
 };
 
-export const re = "/^[0-9\b]$/";
+const re = "/^[0-9\b]$/";
 
 class TeamSizeSelector extends React.Component {
-  state = {};
-
-  componentDidMount() {
-    this.setState({ selected: option_selected.m1v1 });
+  constructor(props) {
+    super(props);
+    this.changeCallback = props.callback;
   }
 
   drawOptionSelector() {
+    let selected = 3;
+    let cur = this.props.teams;
+    if (cur === BaseTeamSizes.m1v1) selected = 0;
+    else if (cur === BaseTeamSizes.m2v2) selected = 1;
+    else if (cur === BaseTeamSizes.m3v3) selected = 2;
     return (
       <div>
         <button
           onClick={() => {
-            this.setState({ selected: 0 });
+            this.changeCallback(BaseTeamSizes.m1v1);
           }}
-          className={"oSel" + this.state.selected}
+          className={"oSel" + selected}
         >
           1v1
         </button>
         <button
           onClick={() => {
-            this.setState({ selected: 1 });
+            this.changeCallback(BaseTeamSizes.m2v2);
           }}
-          className={"oSel" + (1 - this.state.selected)}
+          className={"oSel" + (1 - selected)}
         >
           2v2
         </button>
         <button
           onClick={() => {
-            this.setState({ selected: 2 });
+            this.changeCallback(BaseTeamSizes.m3v3);
           }}
-          className={"oSel" + (2 - this.state.selected)}
+          className={"oSel" + (2 - selected)}
         >
           3v3
         </button>
@@ -48,7 +51,7 @@ class TeamSizeSelector extends React.Component {
           onClick={() => {
             this.setState({ selected: 3 });
           }}
-          className={"oSel" + (3 - this.state.selected)}
+          className={"oSel" + (3 - selected)}
         >
           CUSTOM
         </button>
