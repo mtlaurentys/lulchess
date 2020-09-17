@@ -35,7 +35,8 @@ class MatchCreationMenu extends React.Component {
   }
 
   createMatch() {
-    this.create(JSON.parse(JSON.stringify(this.state)));
+    let params = JSON.stringify(this.state);
+    this.create(params);
   }
 
   render() {
@@ -45,7 +46,7 @@ class MatchCreationMenu extends React.Component {
         <TeamSizeSelector teams={st.teamSize} callback={this.updateTeamSize} />
         <TimeSelector clock={st.timeSelection} callback={this.updateClock} />
         <PowerUpSelector />
-        <button>Create Match</button>
+        <button onClick={this.createMatch}>Create Match</button>
       </div>
     );
   }

@@ -3,9 +3,14 @@ import MatchCreationMenu from "./match_creation/MatchCreationMenu";
 import "./RoomPanel.css";
 
 class RoomPanel extends React.Component {
-  state = {
-    clicked: 0,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      clicked: 0,
+    };
+    this.createMatch = this.createMatch.bind(this);
+    this.server = props.serv;
+  }
 
   drawTaskSelector() {
     return (
@@ -33,7 +38,15 @@ class RoomPanel extends React.Component {
   }
 
   drawMenu() {
-    if (this.state.clicked === 0) return <MatchCreationMenu />;
+    if (this.state.clicked === 0)
+      return <MatchCreationMenu createMatch={this.createMatch} />;
+  }
+
+  createMatch(matchParams) {
+    console.log("SENT DATA");
+    let params = JSON.parse(JSON.stringify(matchParams));
+    console.log(params);
+    this.server.send(params);
   }
 
   render() {
