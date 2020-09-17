@@ -7,8 +7,6 @@ const BaseTeamSizes = {
   m3v3: "3-3",
 };
 
-const re = "/^[0-9\b]$/";
-
 class TeamSizeSelector extends React.Component {
   constructor(props) {
     super(props);

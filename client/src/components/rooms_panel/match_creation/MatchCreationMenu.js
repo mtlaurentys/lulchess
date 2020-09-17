@@ -20,8 +20,10 @@ class MatchCreationMenu extends React.Component {
       fixedPowers: [],
     };
 
+    this.create = props.createMatch;
     this.updateClock = this.updateClock.bind(this);
     this.updateTeamSize = this.updateTeamSize.bind(this);
+    this.createMatch = this.createMatch.bind(this);
   }
 
   updateClock(newTimeFormat) {
@@ -32,6 +34,10 @@ class MatchCreationMenu extends React.Component {
     this.setState({ teamSize: newTeamSizes });
   }
 
+  createMatch() {
+    this.create(JSON.parse(JSON.stringify(this.state)));
+  }
+
   render() {
     let st = this.state;
     return (
@@ -39,6 +45,7 @@ class MatchCreationMenu extends React.Component {
         <TeamSizeSelector teams={st.teamSize} callback={this.updateTeamSize} />
         <TimeSelector clock={st.timeSelection} callback={this.updateClock} />
         <PowerUpSelector />
+        <button>Create Match</button>
       </div>
     );
   }
