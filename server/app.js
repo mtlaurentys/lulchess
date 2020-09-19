@@ -2,7 +2,8 @@
  * Initial point of the server application
  */
 
-const webSocketsServerPort = 8000;
+import webSocketsServerPort from "constants";
+
 const webSocketServer = require("websocket").server;
 const http = require("http");
 // Spinning the http server and the websocket server.
