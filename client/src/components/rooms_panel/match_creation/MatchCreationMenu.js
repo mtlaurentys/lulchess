@@ -5,6 +5,8 @@ import TeamSizeSelector from "./TeamSizeSelector";
 import TimeSelector from "./TimeSelector";
 import PowerUpSelector from "./PowerUpSelector";
 
+const createMatchType = 2;
+
 class MatchCreationMenu extends React.Component {
   constructor(props) {
     super(props);

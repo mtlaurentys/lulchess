@@ -3,9 +3,12 @@
  *  new connections with callback and handling methods
  */
 
-const consts = require("./constants");
+const servConsts = require("./constants");
 const webSocketServer = require("websocket").server;
 const http = require("http");
+
+const webSocketsServerPort = servConsts.webSocketsServerPort;
+const clientMessageTypes = servConsts.clientMessageTypes;
 
 function getID() {
   const s4 = () =>
@@ -18,6 +21,11 @@ function getID() {
 function handleMessage(cnID, event) {
   console.log(cnID);
   let params = JSON.parse(event.utf8Data);
+  if (params.hasOwnProperty("messageType")) {
+    console.log("ok request");
+  } else {
+    console.log("not ok request");
+  }
   console.log(params);
   let test = params.teamSize;
   console.log(test);
@@ -26,7 +34,7 @@ function handleMessage(cnID, event) {
 class LCServer {
   constructor() {
     this.server = http.createServer();
-    this.server.listen(consts.webSocketsServerPort);
+    this.server.listen(webSocketsServerPort);
     this.wsServer = new webSocketServer({
       httpServer: this.server,
     });
@@ -50,7 +58,7 @@ class LCServer {
     connection.on("message", function incoming(event) {
       handleMessage(userID, event);
     });
-    connection.send(new Int8Array([1, 2, 3, 4]));
+    connection.send("clientMessageTypes " + JSON.stringify(clientMessageTypes));
   };
 }
 
