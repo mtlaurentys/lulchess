@@ -1,9 +1,9 @@
 import React from "react";
-import * as enums from "../../../constants/MatchCreationEnums";
-import "./MatchCreationMenu.css";
-import TeamSizeSelector from "./TeamSizeSelector";
-import TimeSelector from "./TimeSelector";
-import PowerUpSelector from "./PowerUpSelector";
+import * as enums from "../../../constants/match_enums";
+import "./match_creation_menu.css";
+import TeamSizeSelector from "./team_size_selector";
+import TimeSelector from "./time_selector";
+import PowerUpSelector from "./powerup_selector";
 
 // const createMatchType = 2;
 

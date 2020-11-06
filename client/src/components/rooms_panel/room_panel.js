@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
-import MatchCreationMenu from "./match_creation/MatchCreationMenu";
-import "./RoomPanel.css";
+import MatchCreationMenu from "./match_creation/match_creation_menu";
+import "./room_panel.css";
 
 class RoomPanel extends React.Component {
     constructor(props) {

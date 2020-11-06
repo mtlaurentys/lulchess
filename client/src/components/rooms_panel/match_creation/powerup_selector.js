@@ -1,5 +1,5 @@
 import React from "react";
-import "./PowerUpSelector.css";
+import "./powerup_selector.css";
 
 class PowerUpSelector extends React.Component {
     constructor(props) {

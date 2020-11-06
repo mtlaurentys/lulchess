@@ -1,8 +1,8 @@
 import React from "react";
-import "./App.css";
-import NavBar from "./components/navbar/Navbar";
-import RoomPanel from "./components/rooms_panel/RoomPanel";
-import ServerHandler from "./ServerHandler";
+import "./app.css";
+import NavBar from "./components/navbar/navbar";
+import RoomPanel from "./components/rooms_panel/room_panel";
+import ServerHandler from "./server_handler";
 
 class App extends React.Component {
     constructor(props) {
