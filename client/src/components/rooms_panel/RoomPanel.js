@@ -3,60 +3,57 @@ import MatchCreationMenu from "./match_creation/MatchCreationMenu";
 import "./RoomPanel.css";
 
 class RoomPanel extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      clicked: 0,
-    };
-    this.createMatch = this.createMatch.bind(this);
-    this.server = props.serv;
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            clicked: 0,
+        };
+        this.CreateMatch = this.CreateMatch.bind(this);
+        this.serverHandler = props.serverHandler;
+    }
 
-  drawTaskSelector() {
-    return (
-      <Fragment>
-        <button
-          id="createMatch"
-          className={"sel" + (1 - this.state.clicked)}
-          onClick={() => {
-            this.setState({ clicked: 0 });
-          }}
-        >
-          Create Match
-        </button>
-        <button
-          id="viewLobby"
-          className={"sel" + this.state.clicked}
-          onClick={() => {
-            this.setState({ clicked: 1 });
-          }}
-        >
-          View Lobby
-        </button>
-      </Fragment>
-    );
-  }
+    drawTaskSelector() {
+        return (
+            <Fragment>
+                <button
+                    id="createMatch"
+                    className={"sel" + (1 - this.state.clicked)}
+                    onClick={() => {
+                        this.setState({ clicked: 0 });
+                    }}
+                >
+                    Create Match
+                </button>
+                <button
+                    id="viewLobby"
+                    className={"sel" + this.state.clicked}
+                    onClick={() => {
+                        this.setState({ clicked: 1 });
+                    }}
+                >
+                    View Lobby
+                </button>
+            </Fragment>
+        );
+    }
 
-  drawMenu() {
-    if (this.state.clicked === 0)
-      return <MatchCreationMenu createMatch={this.createMatch} />;
-  }
+    drawMenu() {
+        if (this.state.clicked === 0)
+            return <MatchCreationMenu CreateMatch={this.CreateMatch} />;
+    }
 
-  createMatch(matchParams) {
-    console.log("SENT DATA");
-    let params = JSON.parse(JSON.stringify(matchParams));
-    console.log(params);
-    this.server.send(params);
-  }
+    CreateMatch(matchParams) {
+        this.serverHandler.Send("createMatch", matchParams);
+    }
 
-  render() {
-    return (
-      <div id="roomPanel">
-        {this.drawTaskSelector()}
-        {this.drawMenu()}
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div id="roomPanel">
+                {this.drawTaskSelector()}
+                {this.drawMenu()}
+            </div>
+        );
+    }
 }
 
 export default RoomPanel;

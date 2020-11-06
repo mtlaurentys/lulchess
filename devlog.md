@@ -1,5 +1,11 @@
 # DEVLOG
 
+### 05/11/2020
+
+Fixed a problem with controlled/uncotrolled component.
+Improved client side of match creation
+Imporved server-client massage exchange
+
 ### 18/09/2020
 
 Giving server-side code some factoring

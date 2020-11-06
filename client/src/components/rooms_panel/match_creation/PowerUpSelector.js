@@ -2,49 +2,52 @@ import React from "react";
 import "./PowerUpSelector.css";
 
 class PowerUpSelector extends React.Component {
-  state = {};
-  componentDidMount() {
-    this.setState({ numPowerUps: "3" });
-    this.changeNPUps = this.changeNPUps.bind(this);
-  }
+    constructor(props) {
+        super(props);
+        this.changeCallback = props.callback;
+        this.powerUps = props.options;
+        this.changeNPUps = this.changeNPUps.bind(this);
+        this.DrawNumPups = this.DrawNumPups.bind(this);
+    }
 
-  changeNPUps(e) {
-    if (e.target.value === "") this.setState({ numPowerUps: "" });
-    else if ("0" <= e.target.value && e.target.value <= "9")
-      this.setState({ numPowerUps: e.target.value });
-  }
+    changeNPUps(newPowerUpAmt) {
+        if (newPowerUpAmt.target.value === "") this.powerUps.powerAmt = 0;
+        else this.powerUps.powerAmt = Number(newPowerUpAmt.target.value);
+        this.changeCallback(this.powerUps);
+    }
 
-  drawNumPups() {
-    return (
-      <label>
-        # of Pups
-        <input
-          id="numPowerUps"
-          value={this.state.numPowerUps}
-          onChange={this.changeNPUps}
-          maxLength="1"
-        />
-      </label>
-    );
-  }
+    DrawNumPups() {
+        let val = this.powerUps.powerAmt;
+        return (
+            <label>
+                # of Pups
+                <input
+                    id="numPowerUps"
+                    value={val ? val : ""}
+                    onChange={this.changeNPUps}
+                    maxLength="1"
+                />
+            </label>
+        );
+    }
 
-  drawMultiBoardCheckbox() {
-    return (
-      <label>
-        Multiboard
-        <input type="checkbox" id="multiboard" />
-      </label>
-    );
-  }
+    DrawMultiBoardCheckbox() {
+        return (
+            <label>
+                Multiboard
+                <input type="checkbox" id="multiboard" />
+            </label>
+        );
+    }
 
-  render() {
-    return (
-      <div id="PowerUpSelector">
-        {this.drawNumPups()}
-        {this.drawMultiBoardCheckbox()}
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div id="PowerUpSelector">
+                {this.DrawNumPups()}
+                {this.DrawMultiBoardCheckbox()}
+            </div>
+        );
+    }
 }
 
 export default PowerUpSelector;
