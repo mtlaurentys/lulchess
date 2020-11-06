@@ -5,9 +5,9 @@
 const LCServer = require("./server_setup");
 
 class Apllication {
-  constructor() {
-    this.server = new LCServer();
-  }
+    constructor() {
+        this.server = new LCServer();
+    }
 }
 
-let app = new Apllication();
+let App = new Apllication();
