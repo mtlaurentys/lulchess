@@ -3,24 +3,37 @@ var ReadWriteLock = require("rwlock");
 const { setTimeout } = require("timers");
 
 const MatchManager = require("./match_manager");
+const Room = require("./room");
 const createErrors = require("./constants").createRoomErrors;
 
-const ROUGH_MAX_ROOMS = 10;
-
+const ROUGH_MAX_ROOMS = 5;
+const print = console.log;
 class RoomManager {
     constructor(lobbyEmitter) {
         this.lobbyEmitter = lobbyEmitter;
         this.TryJoin = this.TryJoin.bind(this);
         this.rooms = [];
+        this.roomsEmitters = []; // EventEmmiters from rooms
         this.availableRooms = [
             ...Array(Math.trunc(1.5 * ROUGH_MAX_ROOMS)).keys(),
         ];
         this.MakeRoomID = this.MakeRoomID.bind(this);
         this.lock = new ReadWriteLock();
+        this.GetInfo = this.GetInfo.bind(this);
+    }
+
+    GetInfo() {
+        let info = [];
+        this.rooms.forEach((room) => {
+            info.push(room.GetInfo());
+        });
+        return info;
     }
 
     MakeRoomID() {
-        return this.availableRooms.pop();
+        let id = this.availableRooms.pop();
+        print(id);
+        return id;
     }
 
     TryJoin(matchParams) {
@@ -28,10 +41,14 @@ class RoomManager {
     }
 
     CreateRoom(roomSpecs, uID) {
-        console.log("chegou room man");
+        let rID;
+        // Prevents the server from keeping many rooms over the estimate
+        if (this.rooms.length >= ROUGH_MAX_ROOMS) {
+            this.lobbyEmitter.emit("create_room_error", createErrors.overMax);
+            return;
+        }
         this.lock.writeLock((release) => {
-            // Prevents the server from keeping many rooms over the estimate
-            if (this.rooms.length >= ROUGH_MAX_ROOMS) {
+            if (!this.availableRooms.length) {
                 release();
                 this.lobbyEmitter.emit(
                     "create_room_error",
@@ -39,10 +56,13 @@ class RoomManager {
                 );
                 return;
             }
-            let id = this.MakeRoomID();
+            rID = this.MakeRoomID();
             release();
-            console.log("ID = " + id);
         });
+        let em = new EventEmitter();
+        let nRoom = new Room(em, roomSpecs, uID, rID);
+        this.roomsEmitters.push(em);
+        this.rooms.push(nRoom);
     }
 }
 

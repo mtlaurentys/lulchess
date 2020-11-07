@@ -1,8 +1,13 @@
 # DEVLOG
 
+### 07/11/2020
+
+Continued match creation on server side
+
 ### 06/11/2020
 
 file_name convention in use
+Started implementing match creation in the server side
 
 ### 05/11/2020
 

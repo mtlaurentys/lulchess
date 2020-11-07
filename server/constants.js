@@ -15,10 +15,12 @@ const clientMessageTypes = {
     createMatch: 2,
     joinMatch: 3,
     endMatch: 4,
+    getActiveRooms: 5,
 };
 
 const createRoomErrors = {
     overMax: 0,
+    roomFull: 1,
 };
 
 const createMatchFields = [
@@ -34,5 +36,6 @@ const createMatchFields = [
 ];
 
 define("clientMessageTypes", clientMessageTypes);
+define("createRoomErrors", createRoomErrors);
 define("createMatchFields", createMatchFields);
 define("webSocketsServerPort", 8000);

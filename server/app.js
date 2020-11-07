@@ -2,9 +2,11 @@
  * Initial point of the server application
  */
 
+"use strict";
+
 const EventEmitter = require("events");
 
-const LCServer = require("./server_setup");
+const LCServer = require("./server_handler");
 const LobbyManager = require("./lobby_manager");
 
 class Apllication {

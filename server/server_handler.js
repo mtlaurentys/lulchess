@@ -23,16 +23,21 @@ class LCServer {
         this.handleMessage = this.handleMessage.bind(this);
         this.receiveNewConnection = this.receiveNewConnection.bind(this);
         this.wsServer.on("request", this.receiveNewConnection);
+        this.SendMessage = this.SendMessage.bind(this);
+        this.eventHandler.on("rooms_info", (cID, rooms) =>
+            this.SendMessage(cID, "activeRooms", rooms)
+        );
+    }
+
+    SendMessage(cID, messageType, infoObject) {
+        console.log("SENT MESSAGE: " + messageType);
+        this.clients[cID].send(messageType + " " + JSON.stringify(infoObject));
     }
 
     receiveNewConnection(request) {
-        console.log("RECEBEU REQUEST");
         var userID = getID();
         console.log(
-            new Date() +
-                " Recieved a new connection from origin " +
-                request.origin +
-                "."
+            " Recieved a new connection from origin " + request.origin + "."
         );
         const connection = request.accept(null, request.origin);
         this.clients[userID] = connection;
