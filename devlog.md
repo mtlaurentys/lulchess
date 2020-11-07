@@ -1,5 +1,9 @@
 # DEVLOG
 
+### 06/11/2020
+
+file_name convention in use
+
 ### 05/11/2020
 
 Fixed a problem with controlled/uncotrolled component.

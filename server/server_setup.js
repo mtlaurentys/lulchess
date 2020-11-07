@@ -49,31 +49,30 @@ class LCServer {
     handleMessage(cnID, event) {
         console.log(cnID);
         let params = JSON.parse(event.utf8Data);
-        if (params.hasOwnProperty("messageType")) {
-            let mType = params.messageType;
-            if (clientMessageTypes.hasOwnProperty(mType)) {
-                console.log("Good Request");
-                switch (clientMessageTypes.mType) {
-                    case clientMessageTypes.getPieces:
-                        break;
-                    case clientMessageTypes.getInterpreter:
-                        break;
-                    default:
-                        console.log("emitted");
-                        this.eventHandler.emit(
-                            "client_message",
-                            cnID,
-                            mType,
-                            params
-                        );
-                }
-            } else console.log("Bad Request. Ignoring...");
-        } else {
+        if (!params.hasOwnProperty("messageType")) {
             console.log("Unspecified Request. Ignoring...");
+            return;
+        }
+        let mType = params.messageType;
+        if (!clientMessageTypes.hasOwnProperty(mType)) {
+            console.log("Bad Request. Ignoring...");
+            return;
+        }
+        console.log("Good Request");
+        switch (clientMessageTypes.mType) {
+            case clientMessageTypes.getPieces:
+                break;
+            case clientMessageTypes.getInterpreter:
+                break;
+            default:
+                this.eventHandler.emit(
+                    "client_message",
+                    cnID,
+                    clientMessageTypes[mType],
+                    params
+                );
         }
         console.log(params);
-        let test = params.teamSize;
-        console.log(test);
     }
 }
 

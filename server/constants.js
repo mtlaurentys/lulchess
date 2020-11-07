@@ -17,6 +17,10 @@ const clientMessageTypes = {
     endMatch: 4,
 };
 
+const createRoomErrors = {
+    overMax: 0,
+};
+
 const createMatchFields = [
     "teamSize",
     "timeSelection",
