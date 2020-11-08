@@ -1,4 +1,5 @@
 const EventEmitter = require("events");
+const { release } = require("os");
 var ReadWriteLock = require("rwlock");
 const { setTimeout } = require("timers");
 
@@ -12,27 +13,40 @@ class RoomManager {
     constructor(lobbyEmitter) {
         this.lobbyEmitter = lobbyEmitter;
         this.TryJoin = this.TryJoin.bind(this);
-        this.rooms = [];
-        this.roomsEmitters = []; // EventEmmiters from rooms
+        this.inGame = {}; // uID -> rID
+        this.openRooms = {}; // rID -> {room, emitter}
         this.availableRooms = [
             ...Array(Math.trunc(1.5 * ROUGH_MAX_ROOMS)).keys(),
         ];
         this.MakeRoomID = this.MakeRoomID.bind(this);
+        this.RemoveUser = this.RemoveUser.bind(this);
         this.lock = new ReadWriteLock();
         this.GetInfo = this.GetInfo.bind(this);
     }
 
+    RemoveUser(uID) {
+        let rID = this.inGame[uID];
+        delete this.inGame[uID];
+        this.lock.writeLock((release) => {
+            if (this.openRooms[rID].room.GetInfo().currentPlayers == 1) {
+                delete this.openRooms[rID];
+                this.availableRooms.push(rID);
+            }
+            release();
+        });
+    }
+
     GetInfo() {
         let info = [];
-        this.rooms.forEach((room) => {
-            info.push(room.GetInfo());
-        });
+        for (const roomID in this.openRooms) {
+            print(this.openRooms[roomID]);
+            info.push(this.openRooms[roomID].room.GetInfo());
+        }
         return info;
     }
 
     MakeRoomID() {
         let id = this.availableRooms.pop();
-        print(id);
         return id;
     }
 
@@ -43,7 +57,7 @@ class RoomManager {
     CreateRoom(roomSpecs, uID) {
         let rID;
         // Prevents the server from keeping many rooms over the estimate
-        if (this.rooms.length >= ROUGH_MAX_ROOMS) {
+        if (this.availableRooms.length < 0.5 * ROUGH_MAX_ROOMS) {
             this.lobbyEmitter.emit("create_room_error", createErrors.overMax);
             return;
         }
@@ -61,8 +75,8 @@ class RoomManager {
         });
         let em = new EventEmitter();
         let nRoom = new Room(em, roomSpecs, uID, rID);
-        this.roomsEmitters.push(em);
-        this.rooms.push(nRoom);
+        this.openRooms[rID] = { room: nRoom, emitter: em };
+        this.inGame[uID] = rID;
     }
 }
 

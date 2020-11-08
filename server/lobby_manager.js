@@ -14,10 +14,16 @@ class LobbyManager {
         this.roomManager = new RoomManager(this.roomsEmitter);
         this.eventHandler = eventHandler;
         this.HandleClientMessage = this.HandleClientMessage.bind(this);
+        this.RemoveUser = this.RemoveUser.bind(this);
         this.eventHandler.on("client_message", (a, b, c) => {
             this.HandleClientMessage(a, b, c);
         });
+        this.eventHandler.on("user_disconnected", this.RemoveUser);
         this.CreateMatch = this.CreateMatch.bind(this);
+    }
+
+    RemoveUser(uID) {
+        this.roomManager.RemoveUser(uID);
     }
 
     CreateMatch(uID, params) {

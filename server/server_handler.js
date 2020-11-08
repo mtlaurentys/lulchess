@@ -29,7 +29,6 @@ class LCServer {
         this.SendMessage = this.SendMessage.bind(this);
 
         this.wsServer.on("request", this.ReceiveNewConnection);
-        this.wsServer.on("close", this.CloseConnection);
         this.eventHandler.on("rooms_info", (cID, rooms) =>
             this.SendMessage(cID, "activeRooms", rooms)
         );
@@ -48,15 +47,17 @@ class LCServer {
         connection.on("message", (event) => {
             this.HandleMessage(userID, event);
         });
+        connection.on("close", (a, b) => this.CloseConnection(userID, a, b));
         connection.send(
             "clientMessageTypes " + JSON.stringify(clientMessageTypes)
         );
         connection.send("ID " + userID);
     }
 
-    CloseConnection(connection, reason, description) {
-        print(connection);
-        print(reason);
+    CloseConnection(id, code, reason) {
+        print("LEAVING: " + id);
+        this.eventHandler.emit("user_disconnected", id);
+        delete this.clients[id];
     }
 
     HandleMessage(cnID, event) {
