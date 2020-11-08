@@ -11,6 +11,9 @@ const servConsts = require("./constants");
 const webSocketsServerPort = servConsts.webSocketsServerPort;
 const clientMessageTypes = servConsts.clientMessageTypes;
 
+//Helper
+const print = console.log;
+
 class LCServer {
     constructor(eventHandler) {
         this.server = http.createServer();
@@ -20,10 +23,13 @@ class LCServer {
         });
         this.clients = {};
         this.eventHandler = eventHandler;
-        this.handleMessage = this.handleMessage.bind(this);
-        this.receiveNewConnection = this.receiveNewConnection.bind(this);
-        this.wsServer.on("request", this.receiveNewConnection);
+
+        this.HandleMessage = this.HandleMessage.bind(this);
+        this.ReceiveNewConnection = this.ReceiveNewConnection.bind(this);
         this.SendMessage = this.SendMessage.bind(this);
+
+        this.wsServer.on("request", this.ReceiveNewConnection);
+        this.wsServer.on("close", this.CloseConnection);
         this.eventHandler.on("rooms_info", (cID, rooms) =>
             this.SendMessage(cID, "activeRooms", rooms)
         );
@@ -34,16 +40,13 @@ class LCServer {
         this.clients[cID].send(messageType + " " + JSON.stringify(infoObject));
     }
 
-    receiveNewConnection(request) {
-        var userID = getID();
-        console.log(
-            " Recieved a new connection from origin " + request.origin + "."
-        );
+    ReceiveNewConnection(request) {
+        let userID = getID();
         const connection = request.accept(null, request.origin);
         this.clients[userID] = connection;
         console.log("NEW CONNECTION: " + userID);
         connection.on("message", (event) => {
-            this.handleMessage(userID, event);
+            this.HandleMessage(userID, event);
         });
         connection.send(
             "clientMessageTypes " + JSON.stringify(clientMessageTypes)
@@ -51,7 +54,12 @@ class LCServer {
         connection.send("ID " + userID);
     }
 
-    handleMessage(cnID, event) {
+    CloseConnection(connection, reason, description) {
+        print(connection);
+        print(reason);
+    }
+
+    HandleMessage(cnID, event) {
         console.log(cnID);
         let params = JSON.parse(event.utf8Data);
         if (!params.hasOwnProperty("messageType")) {

@@ -30,7 +30,6 @@ class App extends React.Component {
     }
 
     AssignMessageTypes(types) {
-        print("called");
         this.setState({ messageTypes: types });
     }
 
