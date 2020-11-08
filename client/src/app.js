@@ -8,20 +8,29 @@ import "./app.css";
 import NavBar from "./components/navbar/navbar";
 import RoomPanel from "./components/rooms_panel/room_panel";
 import ServerHandler from "./server_handler";
+const print = console.log;
 
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { messageTypes: null, sessionID: null };
+        this.state = {
+            messageTypes: null,
+            sessionID: null,
+            SetServerCallback: null,
+        };
+        this.AssignMessageTypes = this.AssignMessageTypes.bind(this);
     }
 
     componentDidMount() {
-        this.AssignMessageTypes = this.AssignMessageTypes.bind(this);
         this.serverHandler = new ServerHandler(this.AssignMessageTypes);
         this.serverConnection = this.serverHandler.getConnection();
+        this.setState({
+            SetServerCallback: this.serverHandler.GetCallbackSetter(),
+        });
     }
 
     AssignMessageTypes(types) {
+        print("called");
         this.setState({ messageTypes: types });
     }
 
@@ -35,6 +44,7 @@ class App extends React.Component {
     }
 
     render() {
+        print("App Render: " + this.SetServerCallback);
         if (this.state.messageTypes === null) return this.RenderLoad();
         return (
             <div className="App">
@@ -42,6 +52,7 @@ class App extends React.Component {
                 <RoomPanel
                     id="roomPanel"
                     serverHandler={this.serverHandler}
+                    SetServerCallback={this.state.SetServerCallback}
                 ></RoomPanel>
             </div>
         );

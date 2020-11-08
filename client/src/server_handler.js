@@ -11,6 +11,11 @@ class ServerHandler {
         this.callbacks = {};
         this.Send = this.Send.bind(this);
         this.SetCallback = this.SetCallback.bind(this);
+        this.GetCallbackSetter = this.GetCallbackSetter.bind(this);
+    }
+
+    GetCallbackSetter() {
+        return this.SetCallback;
     }
 
     SetCallback(key, cbFunc) {

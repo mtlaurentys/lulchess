@@ -1,8 +1,13 @@
 # DEVLOG
 
+### 08/11/2020
+
+Finished match display client side
+
 ### 07/11/2020
 
-Continued match creation on server side
+Continued and finished match creation on server side
+Started current match display on client side
 
 ### 06/11/2020
 
