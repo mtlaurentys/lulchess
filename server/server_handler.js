@@ -10,31 +10,35 @@ const http = require("http");
 const servConsts = require("./constants");
 const webSocketsServerPort = servConsts.webSocketsServerPort;
 const clientMessageTypes = servConsts.clientMessageTypes;
+const roomsMessageTypes = require("./constants").roomsMessageTypes;
 
 //Helper
 const print = console.log;
 
 class LCServer {
-    constructor(eventHandler) {
+    constructor(serverEmitter) {
         this.server = http.createServer();
         this.server.listen(webSocketsServerPort);
         this.wsServer = new webSocketServer({
             httpServer: this.server,
         });
         this.clients = {};
-        this.eventHandler = eventHandler;
+        this.serverEmitter = serverEmitter;
 
         this.HandleMessage = this.HandleMessage.bind(this);
         this.ReceiveNewConnection = this.ReceiveNewConnection.bind(this);
         this.SendMessage = this.SendMessage.bind(this);
 
         this.wsServer.on("request", this.ReceiveNewConnection);
-        this.eventHandler.on("rooms_info", (cID, rooms) =>
-            this.SendMessage(cID, "activeRooms", rooms)
+        this.serverEmitter.on(serverEmitterMTypes.activeRooms, (cID, rooms) =>
+            this.SendMessage("activeRooms", cID, rooms)
+        );
+        this.serverEmitter.on(serverEmitterMTypes.createdRoom, (cID, rID) =>
+            this.SendMessage("createdRoom", cID, rID)
         );
     }
 
-    SendMessage(cID, messageType, infoObject) {
+    SendMessage(messageType, cID, infoObject) {
         console.log("SENT MESSAGE: " + messageType);
         this.clients[cID].send(messageType + " " + JSON.stringify(infoObject));
     }
@@ -56,7 +60,7 @@ class LCServer {
 
     CloseConnection(id, code, reason) {
         print("LEAVING: " + id);
-        this.eventHandler.emit("user_disconnected", id);
+        this.serverEmitter.emit("user_disconnected", id);
         delete this.clients[id];
     }
 
@@ -79,7 +83,7 @@ class LCServer {
             case clientMessageTypes.getInterpreter:
                 break;
             default:
-                this.eventHandler.emit(
+                this.serverEmitter.emit(
                     "client_message",
                     cnID,
                     clientMessageTypes[mType],

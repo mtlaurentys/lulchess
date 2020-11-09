@@ -1,8 +1,12 @@
 # DEVLOG
 
+### 09/11/2020
+
+Started active room display on client side
+
 ### 08/11/2020
 
-Finished match display client side
+Finished lobby display client side
 
 ### 07/11/2020
 

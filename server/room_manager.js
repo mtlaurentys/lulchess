@@ -6,6 +6,7 @@ const { setTimeout } = require("timers");
 const MatchManager = require("./match_manager");
 const Room = require("./room");
 const createErrors = require("./constants").createRoomErrors;
+const roomsMessageTypes = require("./constants").roomsMessageTypes;
 
 const ROUGH_MAX_ROOMS = 5;
 const print = console.log;
@@ -28,6 +29,10 @@ class RoomManager {
         let rID = this.inGame[uID];
         delete this.inGame[uID];
         this.lock.writeLock((release) => {
+            if (!this.openRooms[rID]) {
+                release();
+                return;
+            }
             if (this.openRooms[rID].room.GetInfo().currentPlayers == 1) {
                 delete this.openRooms[rID];
                 this.availableRooms.push(rID);
@@ -77,6 +82,10 @@ class RoomManager {
         let nRoom = new Room(em, roomSpecs, uID, rID);
         this.openRooms[rID] = { room: nRoom, emitter: em };
         this.inGame[uID] = rID;
+        this.lobbyEmitter.emit("rooms_message", roomsMessageTypes.createdRoom, {
+            uid: uID,
+            rid: rID,
+        });
     }
 }
 

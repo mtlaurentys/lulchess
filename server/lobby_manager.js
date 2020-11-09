@@ -6,19 +6,23 @@ const EventEmitter = require("events");
 
 const RoomManager = require("./room_manager");
 const clientMessageTypes = require("./constants").clientMessageTypes;
+const roomsMessageTypes = require("./constants").roomsMessageTypes;
+const serverEmitterMTypes = require("./constants").serverEmitterMTypes;
 const print = console.log;
 
 class LobbyManager {
-    constructor(eventHandler) {
+    constructor(serverEmitter) {
         this.roomsEmitter = new EventEmitter();
         this.roomManager = new RoomManager(this.roomsEmitter);
-        this.eventHandler = eventHandler;
+        this.serverEmitter = serverEmitter;
         this.HandleClientMessage = this.HandleClientMessage.bind(this);
+        this.HandleRoomMessage = this.HandleRoomMessage.bind(this);
         this.RemoveUser = this.RemoveUser.bind(this);
-        this.eventHandler.on("client_message", (a, b, c) => {
+        this.serverEmitter.on("client_message", (a, b, c) => {
             this.HandleClientMessage(a, b, c);
         });
-        this.eventHandler.on("user_disconnected", this.RemoveUser);
+        this.roomsEmitter.on("rooms_message", this.HandleRoomMessage);
+        this.serverEmitter.on("user_disconnected", this.RemoveUser);
         this.CreateMatch = this.CreateMatch.bind(this);
     }
 
@@ -37,7 +41,27 @@ class LobbyManager {
 
     SupplyActiveRooms(cID) {
         console.log("SUPPLIED!");
-        this.eventHandler.emit("rooms_info", cID, this.roomManager.GetInfo());
+        this.serverEmitter.emit(
+            serverEmitterMTypes.activeRooms,
+            cID,
+            this.roomManager.GetInfo()
+        );
+    }
+
+    HandleRoomMessage(messType, info) {
+        print("LOBBY MTYPE: " + messType);
+        print("LOBBY MTYPE 2: " + roomsMessageTypes.createdRoom);
+        switch (messType) {
+            case roomsMessageTypes.createdRoom:
+                this.serverEmitter.emit(
+                    serverEmitterMTypes.createdRoom,
+                    info.uid,
+                    info.rid
+                );
+                break;
+            default:
+                print("Unknown rooms message type. Ignoring...");
+        }
     }
 
     HandleClientMessage(clientID, messType, params) {

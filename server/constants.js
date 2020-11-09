@@ -9,6 +9,11 @@ function define(name, value) {
     });
 }
 
+serverEmitterMTypes = {
+    createdRoom: 0,
+    activeRooms: 1,
+};
+
 const clientMessageTypes = {
     getPieces: 0,
     getInterpreter: 1,
@@ -21,6 +26,11 @@ const clientMessageTypes = {
 const createRoomErrors = {
     overMax: 0,
     roomFull: 1,
+};
+
+const roomsMessageTypes = {
+    createdRoom: 0,
+    madeMove: 1,
 };
 
 const createMatchFields = [
@@ -36,6 +46,8 @@ const createMatchFields = [
 ];
 
 define("clientMessageTypes", clientMessageTypes);
+define("roomsMessageTypes", roomsMessageTypes);
 define("createRoomErrors", createRoomErrors);
 define("createMatchFields", createMatchFields);
+define("serverEmitterMTypes", serverEmitterMTypes);
 define("webSocketsServerPort", 8000);

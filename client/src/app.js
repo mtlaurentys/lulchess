@@ -7,26 +7,34 @@ import React from "react";
 import "./app.css";
 import NavBar from "./components/navbar/navbar";
 import RoomPanel from "./components/rooms_panel/room_panel";
+import ActiveRoom from "./components/room/active_room";
 import ServerHandler from "./server_handler";
 const print = console.log;
 
 class App extends React.Component {
     constructor(props) {
         super(props);
+        this.serverHandler = new ServerHandler();
+        this.serverConnection = this.serverHandler.getConnection();
         this.state = {
             messageTypes: null,
             sessionID: null,
-            SetServerCallback: null,
+            inRoom: false,
+            room: {
+                lookingForMatch: false,
+                roomID: null,
+            },
+            SetServerCallback: this.serverHandler.GetCallbackSetter(),
         };
         this.AssignMessageTypes = this.AssignMessageTypes.bind(this);
     }
 
     componentDidMount() {
-        this.serverHandler = new ServerHandler(this.AssignMessageTypes);
-        this.serverConnection = this.serverHandler.getConnection();
-        this.setState({
-            SetServerCallback: this.serverHandler.GetCallbackSetter(),
-        });
+        this.state.SetServerCallback(
+            "clientMessageTypes",
+            this.AssignMessageTypes
+        );
+        this.serverHandler.Connect();
     }
 
     AssignMessageTypes(types) {
@@ -43,17 +51,25 @@ class App extends React.Component {
     }
 
     render() {
-        print("App Render: " + this.SetServerCallback);
         if (this.state.messageTypes === null) return this.RenderLoad();
         return (
-            <div className="App">
-                <NavBar id="navBar"></NavBar>
-                <RoomPanel
-                    id="roomPanel"
-                    serverHandler={this.serverHandler}
-                    SetServerCallback={this.state.SetServerCallback}
-                ></RoomPanel>
-            </div>
+            <React.StrictMode>
+                <div className="App">
+                    <NavBar id="navBar"></NavBar>
+                    <RoomPanel
+                        id="roomPanel"
+                        serverHandler={this.serverHandler}
+                        SetServerCallback={this.state.SetServerCallback}
+                    ></RoomPanel>
+                    <ActiveRoom
+                        SetServerCallback={this.state.SetServerCallback}
+                        tellUpdate={(activeRoom) => {
+                            if (activeRoom != this.state.inRoom)
+                                this.setState({ inRoom: activeRoom });
+                        }}
+                    />
+                </div>
+            </React.StrictMode>
         );
     }
 }
