@@ -58,13 +58,15 @@ class App extends React.Component {
                     <NavBar id="navBar"></NavBar>
                     <RoomPanel
                         id="roomPanel"
+                        inRoom={this.state.inRoom}
                         serverHandler={this.serverHandler}
                         SetServerCallback={this.state.SetServerCallback}
                     ></RoomPanel>
                     <ActiveRoom
+                        serverHandler={this.serverHandler}
                         SetServerCallback={this.state.SetServerCallback}
                         tellUpdate={(activeRoom) => {
-                            if (activeRoom != this.state.inRoom)
+                            if (activeRoom !== this.state.inRoom)
                                 this.setState({ inRoom: activeRoom });
                         }}
                     />

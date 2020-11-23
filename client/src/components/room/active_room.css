@@ -1,0 +1,52 @@
+.findingBox {
+    bottom: 1%;
+    right: 1%;
+    font-size: 3em;
+    border-style: solid;
+    border-width: 2px;
+    border-color: lightgray;
+    position: fixed;
+}
+
+#leaveRoomBox {
+    width: 100%;
+    padding-top: 100%;
+    position: absolute;
+    float: left;
+    margin-left: 0;
+}
+
+#leaveRoomButton {
+    background-color: #f19890;
+    border-radius: 50%;
+    cursor: pointer;
+    border-style: solid black;
+    border-width: 0.5%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: -16%;
+    margin-left: -16%;
+
+    overflow: clip;
+    width: 40%;
+    padding-top: 14%;
+    padding-bottom: 14%;
+
+    content: "";
+    font-size: 1em;
+    line-height: 1em;
+}
+
+#leaveRoomText {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: -60%;
+    margin-left: -10%;
+    text-align: center;
+    font-size: 0.3em;
+    line-height: 1em;
+    color: black;
+}

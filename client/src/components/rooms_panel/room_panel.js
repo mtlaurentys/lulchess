@@ -4,16 +4,25 @@ import Lobby from "./view_lobby/lobby";
 import "./room_panel.css";
 const util = require("util");
 const print = console.log;
+
 class RoomPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             clicked: 0,
+            inRoom: props.inRoom,
         };
         this.serverHandler = props.serverHandler;
         this.CreateMatch = this.CreateMatch.bind(this);
         this.GetActiveRooms = this.GetActiveRooms.bind(this);
         this.SetServerCallback = props.SetServerCallback;
+    }
+
+    shouldComponentUpdate(nextProp, nextState, nextContext) {
+        if (nextProp.inRoom !== nextState.inRoom) {
+            nextState.inRoom = nextProp.inRoom;
+        }
+        return true;
     }
 
     CreateMatch(matchParams) {
@@ -52,7 +61,12 @@ class RoomPanel extends React.Component {
     drawMenu() {
         switch (this.state.clicked) {
             case 0:
-                return <MatchCreationMenu CreateMatch={this.CreateMatch} />;
+                return (
+                    <MatchCreationMenu
+                        inRoom={this.state.inRoom}
+                        CreateMatch={this.CreateMatch}
+                    />
+                );
             case 1:
                 return (
                     <Lobby

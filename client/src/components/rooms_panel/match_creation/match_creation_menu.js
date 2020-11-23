@@ -18,6 +18,7 @@ class MatchCreationMenu extends React.Component {
                 boardPlay: enums.boardPlay.parallel,
                 powerSelection: enums.powerSelection.random,
             },
+            inRoom: props.inRoom,
             boards: 1,
             winCondition: enums.winCondition.firstCheckmate,
             powerType: enums.powerType.board,
@@ -27,8 +28,15 @@ class MatchCreationMenu extends React.Component {
         this.create = props.CreateMatch;
         this.updateClock = this.UpdateClock.bind(this);
         this.updateTeamSize = this.UpdateTeamSize.bind(this);
-        this.CreateMatch = this.CreateMatch.bind(this);
+        this.DrawCreateMatch = this.DrawCreateMatch.bind(this);
         this.UpdatePowerUps = this.UpdatePowerUps.bind(this);
+    }
+
+    shouldComponentUpdate(nextProp, nextState, nextContext) {
+        if (nextProp.inRoom !== nextState.inRoom) {
+            nextState.inRoom = nextProp.inRoom;
+        }
+        return true;
     }
 
     UpdateClock(newTimeFormat) {
@@ -45,12 +53,24 @@ class MatchCreationMenu extends React.Component {
         });
     }
 
-    CreateMatch() {
-        this.create(this.state);
+    DrawCreateMatch() {
+        if (this.state.inRoom)
+            return (
+                <button onClick={() => this.create(this.state)} disabled>
+                    Create Match
+                </button>
+            );
+        else
+            return (
+                <button onClick={() => this.create(this.state)}>
+                    Create Match
+                </button>
+            );
     }
 
     render() {
         let st = this.state;
+
         return (
             <div id="MCreationMenu">
                 <TeamSizeSelector
@@ -65,7 +85,7 @@ class MatchCreationMenu extends React.Component {
                     options={st.powerUps}
                     callback={this.UpdatePowerUps}
                 />
-                <button onClick={this.CreateMatch}>Create Match</button>
+                {this.DrawCreateMatch()}
             </div>
         );
     }

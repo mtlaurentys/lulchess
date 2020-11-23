@@ -19,8 +19,6 @@ class Lobby extends React.Component {
         this.requestRoomUpdate();
     }
 
-    componentDidUpdate(prevProps) {}
-
     render() {
         if (this.state.activeRooms.length) {
             return (
