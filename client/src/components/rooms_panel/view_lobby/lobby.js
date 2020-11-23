@@ -9,6 +9,7 @@ class Lobby extends React.Component {
             activeRooms: [],
         };
         this.requestRoomUpdate = props.requestUpdate;
+        this.TryJoin = props.TryJoin;
         this.SetServerCallback = props.SetServerCallback;
     }
 
@@ -17,6 +18,7 @@ class Lobby extends React.Component {
             this.setState({ activeRooms: nRoom })
         );
         this.requestRoomUpdate();
+        this.SetServerCallback("notJoin", () => alert("could not join"));
     }
 
     render() {
@@ -24,7 +26,11 @@ class Lobby extends React.Component {
             return (
                 <ul>
                     {this.state.activeRooms.map((room) => (
-                        <li key={room.id}>{room.id}</li>
+                        <li key={room.id}>
+                            <button onClick={() => this.TryJoin(room.id)}>
+                                {room.id}
+                            </button>
+                        </li>
                     ))}
                 </ul>
             );

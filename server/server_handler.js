@@ -39,15 +39,18 @@ class LCServer {
         this.serverEmitter.on(serverEmitterMTypes.leftRoom, (cID) =>
             this.SendMessage("leftRoom", cID, "")
         );
+        this.serverEmitter.on(
+            serverEmitterMTypes.joinedStatus,
+            (cID, status, rID) => {
+                if (status) this.SendMessage("joined", cID, rID);
+                else this.SendMessage("notJoin", cID, "");
+            }
+        );
     }
 
     SendMessage(messageType, cID, infoObject) {
         console.log(
-            cID +
-                ": SENT MESSAGE: " +
-                messageType +
-                " " +
-                JSON.stringify(infoObject)
+            "SENT MESSAGE: " + messageType + " " + JSON.stringify(infoObject)
         );
         this.clients[cID].send(messageType + " " + JSON.stringify(infoObject));
     }

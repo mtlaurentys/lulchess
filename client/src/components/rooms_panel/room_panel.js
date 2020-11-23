@@ -8,14 +8,15 @@ const print = console.log;
 class RoomPanel extends React.Component {
     constructor(props) {
         super(props);
+        this.SetServerCallback = props.SetServerCallback;
+        this.serverHandler = props.serverHandler;
         this.state = {
             clicked: 0,
             inRoom: props.inRoom,
         };
-        this.serverHandler = props.serverHandler;
         this.CreateMatch = this.CreateMatch.bind(this);
         this.GetActiveRooms = this.GetActiveRooms.bind(this);
-        this.SetServerCallback = props.SetServerCallback;
+        this.TryJoin = this.TryJoin.bind(this);
     }
 
     shouldComponentUpdate(nextProp, nextState, nextContext) {
@@ -28,8 +29,13 @@ class RoomPanel extends React.Component {
     CreateMatch(matchParams) {
         this.serverHandler.Send("createMatch", matchParams);
     }
+
     GetActiveRooms() {
         this.serverHandler.Send("getActiveRooms");
+    }
+
+    TryJoin(rID) {
+        this.serverHandler.Send("tryJoin", { rID: rID });
     }
 
     drawTaskSelector() {
@@ -70,6 +76,7 @@ class RoomPanel extends React.Component {
                 return (
                     <Lobby
                         id="listOfRooms"
+                        TryJoin={this.TryJoin}
                         SetServerCallback={this.SetServerCallback}
                         requestUpdate={this.GetActiveRooms}
                     />

@@ -28,6 +28,10 @@ class ActiveRoom extends React.Component {
             this.setState({ finding: false, id: null });
             this.tellUpdate(false);
         });
+        this.SetServerCallback("joined", (message) => {
+            this.setState({ finding: true, id: JSON.parse(message) });
+            this.tellUpdate(true);
+        });
     }
 
     LeaveRoom() {

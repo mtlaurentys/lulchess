@@ -13,6 +13,7 @@ serverEmitterMTypes = {
     createdRoom: 0,
     activeRooms: 1,
     leftRoom: 2,
+    joinedStatus: 3,
 };
 
 const clientMessageTypes = {
@@ -23,6 +24,7 @@ const clientMessageTypes = {
     endMatch: 4,
     getActiveRooms: 5,
     leaveRoom: 6,
+    tryJoin: 7,
 };
 
 const createRoomErrors = {

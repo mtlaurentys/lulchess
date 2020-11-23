@@ -1,11 +1,11 @@
 var RWLock = require("rwlock");
 const createErrors = require("./constants").createRoomErrors;
-
+const print = console.log;
 class Room {
     constructor(eventEmitter, matchParams, player1, rID) {
         this.eventEmitter = eventEmitter;
         let ts = matchParams.teamSize;
-        this.numPlayers = Number(ts[0]) + Number(ts[1]);
+        this.numPlayers = Number(ts[0]) + Number(ts[2]);
         this.players = [player1];
         this.lock = new RWLock();
         this.active = false;
@@ -29,9 +29,12 @@ class Room {
     }
 
     AddPlayer(player) {
+        let added = false;
         this.lock.writeLock((release) => {
+            print("len: " + this.players.length + "max" + this.numPlayers);
             if (this.players.length < this.numPlayers) {
                 this.players.push(player);
+                added = true;
                 release();
             } else {
                 release();
@@ -41,10 +44,12 @@ class Room {
                 );
             }
         });
-        if (this.players.length == this.numPlayers) {
-            this.eventEmitter.emit("room_full");
-            this.StartMatch();
-        }
+        if (added)
+            if (this.players.length == this.numPlayers) {
+                this.eventEmitter.emit("room_full");
+                this.StartMatch();
+            }
+        return added;
     }
 
     RemovePlayer(player) {

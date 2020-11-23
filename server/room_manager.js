@@ -1,5 +1,6 @@
 const EventEmitter = require("events");
 const { release } = require("os");
+const { join } = require("path");
 var ReadWriteLock = require("rwlock");
 const { setTimeout } = require("timers");
 
@@ -69,8 +70,17 @@ class RoomManager {
         return id;
     }
 
-    TryJoin(matchParams) {
-        return false;
+    TryJoin(uID, rID, matchParams) {
+        if (rID == null) return false; // TODO: implement param matching
+        let joined = false;
+        this.lock.writeLock((release) => {
+            if (!this.openRooms[rID].room.GetInfo().active) {
+                joined = this.openRooms[rID].room.AddPlayer(uID);
+                release();
+            }
+            release();
+        });
+        return joined;
     }
 
     CreateRoom(roomSpecs, uID) {

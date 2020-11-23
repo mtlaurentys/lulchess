@@ -37,7 +37,7 @@ class LobbyManager {
     }
 
     CreateMatch(uID, params) {
-        let result = this.roomManager.TryJoin(params);
+        let result = this.roomManager.TryJoin(uID, null, params);
         if (result) {
             console.log("Joined existing match");
             return;
@@ -79,19 +79,27 @@ class LobbyManager {
         }
     }
 
-    HandleClientMessage(clientID, messType, params) {
+    HandleClientMessage(uID, messType, params) {
         switch (messType) {
             case clientMessageTypes.createMatch:
-                this.CreateMatch(clientID, params);
+                this.CreateMatch(uID, params);
             case clientMessageTypes.joinMatch:
                 break;
             case clientMessageTypes.endMatch:
                 break;
             case clientMessageTypes.getActiveRooms:
-                this.SupplyActiveRooms(clientID);
+                this.SupplyActiveRooms(uID);
                 break;
             case clientMessageTypes.leaveRoom:
-                this.LeaveRoom(clientID);
+                this.LeaveRoom(uID);
+                break;
+            case clientMessageTypes.tryJoin:
+                this.serverEmitter.emit(
+                    serverEmitterMTypes.joinedStatus,
+                    uID,
+                    this.roomManager.TryJoin(uID, params.rID),
+                    params.rID
+                );
                 break;
             default:
         }
