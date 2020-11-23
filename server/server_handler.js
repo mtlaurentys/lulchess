@@ -36,10 +36,19 @@ class LCServer {
         this.serverEmitter.on(serverEmitterMTypes.createdRoom, (cID, rID) =>
             this.SendMessage("createdRoom", cID, rID)
         );
+        this.serverEmitter.on(serverEmitterMTypes.leftRoom, (cID) =>
+            this.SendMessage("leftRoom", cID, "")
+        );
     }
 
     SendMessage(messageType, cID, infoObject) {
-        console.log("SENT MESSAGE: " + messageType);
+        console.log(
+            cID +
+                ": SENT MESSAGE: " +
+                messageType +
+                " " +
+                JSON.stringify(infoObject)
+        );
         this.clients[cID].send(messageType + " " + JSON.stringify(infoObject));
     }
 
@@ -65,7 +74,7 @@ class LCServer {
     }
 
     HandleMessage(cnID, event) {
-        console.log(cnID);
+        console.log("Message from: " + cnID);
         let params = JSON.parse(event.utf8Data);
         if (!params.hasOwnProperty("messageType")) {
             console.log("Unspecified Request. Ignoring...");

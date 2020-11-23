@@ -24,10 +24,14 @@ class ActiveRoom extends React.Component {
             this.setState({ finding: true, id: rID });
             this.tellUpdate(true);
         });
+        this.SetServerCallback("leftRoom", () => {
+            this.setState({ finding: false, id: null });
+            this.tellUpdate(false);
+        });
     }
 
     LeaveRoom() {
-        alert("leave room?");
+        this.serverHandler.Send("leaveRoom");
     }
 
     RenderRoom() {

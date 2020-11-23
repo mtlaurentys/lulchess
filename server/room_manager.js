@@ -27,15 +27,29 @@ class RoomManager {
 
     RemoveUser(uID) {
         let rID = this.inGame[uID];
-        delete this.inGame[uID];
         this.lock.writeLock((release) => {
             if (!this.openRooms[rID]) {
+                delete this.inGame[uID];
                 release();
                 return;
             }
-            if (this.openRooms[rID].room.GetInfo().currentPlayers == 1) {
+            let rInfo = this.openRooms[rID].room.GetInfo();
+            if (rInfo.active || rInfo.currentPlayers == 1) {
                 delete this.openRooms[rID];
                 this.availableRooms.push(rID);
+                rInfo.players.forEach((player) => {
+                    this.lobbyEmitter.emit(
+                        roomsMessageTypes.playerRemoved,
+                        player
+                    );
+                    delete this.inGame[player];
+                });
+            } else {
+                this.lobbyEmitter.emit(roomsMessageTypes.playerRemoved, {
+                    uID: uID,
+                });
+                this.openRooms[room].RemovePlayer(uID);
+                delete this.inGame[uID];
             }
             release();
         });

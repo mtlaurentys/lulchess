@@ -12,18 +12,24 @@ const print = console.log;
 
 class LobbyManager {
     constructor(serverEmitter) {
-        this.roomsEmitter = new EventEmitter();
-        this.roomManager = new RoomManager(this.roomsEmitter);
+        this.lobbyEmitter = new EventEmitter();
+        this.roomManager = new RoomManager(this.lobbyEmitter);
         this.serverEmitter = serverEmitter;
+        // Functions binding
         this.HandleClientMessage = this.HandleClientMessage.bind(this);
         this.HandleRoomMessage = this.HandleRoomMessage.bind(this);
         this.RemoveUser = this.RemoveUser.bind(this);
+        this.CreateMatch = this.CreateMatch.bind(this);
+        this.LeaveRoom = this.LeaveRoom.bind(this);
+        // Standard messages
         this.serverEmitter.on("client_message", (a, b, c) => {
             this.HandleClientMessage(a, b, c);
         });
-        this.roomsEmitter.on("rooms_message", this.HandleRoomMessage);
+        this.lobbyEmitter.on("rooms_message", this.HandleRoomMessage);
+        this.lobbyEmitter.on(roomsMessageTypes.playerRemoved, (uID) => {
+            this.serverEmitter.emit(serverEmitterMTypes.leftRoom, uID);
+        });
         this.serverEmitter.on("user_disconnected", this.RemoveUser);
-        this.CreateMatch = this.CreateMatch.bind(this);
     }
 
     RemoveUser(uID) {
@@ -39,6 +45,11 @@ class LobbyManager {
         let room = this.roomManager.CreateRoom(params, uID);
     }
 
+    LeaveRoom(uID) {
+        console.log("aqui");
+        this.roomManager.RemoveUser(uID);
+    }
+
     SupplyActiveRooms(cID) {
         console.log("SUPPLIED!");
         this.serverEmitter.emit(
@@ -49,14 +60,18 @@ class LobbyManager {
     }
 
     HandleRoomMessage(messType, info) {
-        print("LOBBY MTYPE: " + messType);
-        print("LOBBY MTYPE 2: " + roomsMessageTypes.createdRoom);
         switch (messType) {
             case roomsMessageTypes.createdRoom:
                 this.serverEmitter.emit(
                     serverEmitterMTypes.createdRoom,
                     info.uid,
                     info.rid
+                );
+                break;
+            case roomsMessageTypes.playerRemoved:
+                this.serverEmitter.emit(
+                    serverEmitterMTypes.createdRoom,
+                    info.uid
                 );
                 break;
             default:
@@ -74,6 +89,10 @@ class LobbyManager {
                 break;
             case clientMessageTypes.getActiveRooms:
                 this.SupplyActiveRooms(clientID);
+                break;
+            case clientMessageTypes.leaveRoom:
+                this.LeaveRoom(clientID);
+                break;
             default:
         }
     }

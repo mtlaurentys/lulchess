@@ -8,6 +8,7 @@ class Room {
         this.numPlayers = Number(ts[0]) + Number(ts[1]);
         this.players = [player1];
         this.lock = new RWLock();
+        this.active = false;
         this.AddPlayer = this.AddPlayer.bind(this);
         this.StartMatch = this.StartMatch.bind(this);
         this.eventEmitter.on("player_joined", (player) => {
@@ -21,7 +22,9 @@ class Room {
         return {
             maxPlayers: this.numPlayers,
             currentPlayers: this.players.length,
+            players: this.players,
             id: this.id,
+            active: this.active,
         };
     }
 
@@ -42,6 +45,18 @@ class Room {
             this.eventEmitter.emit("room_full");
             this.StartMatch();
         }
+    }
+
+    RemovePlayer(player) {
+        this.lock.writeLock((release) => {
+            let i = 0;
+            while (i < this.players.length) {
+                if (this.players[i] == player) {
+                    this.players.splice(i, 1);
+                }
+                i += 1;
+            }
+        });
     }
 
     StartMatch() {

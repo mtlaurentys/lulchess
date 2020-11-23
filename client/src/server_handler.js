@@ -32,8 +32,9 @@ class ServerHandler {
     Send(messType, paramsObj) {
         if (!paramsObj) {
             paramsObj = { messageType: messType };
+        } else {
+            paramsObj.messageType = messType;
         }
-        paramsObj.messageType = messType;
         console.log("SENT:\n" + JSON.stringify(paramsObj));
         this.serverConnection.send(JSON.stringify(paramsObj));
     }
@@ -42,6 +43,7 @@ class ServerHandler {
         let mes = message.data;
         let divider = mes.indexOf(" ");
         let firstWord = mes.substring(0, divider);
+        print("RECEIVED:\n" + message);
         switch (firstWord) {
             case "ID":
                 console.log("ID: " + mes.substring(divider, mes.lenght));

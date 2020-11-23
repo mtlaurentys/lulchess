@@ -28,7 +28,6 @@ class RoomPanel extends React.Component {
     CreateMatch(matchParams) {
         this.serverHandler.Send("createMatch", matchParams);
     }
-
     GetActiveRooms() {
         this.serverHandler.Send("getActiveRooms");
     }

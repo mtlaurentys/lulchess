@@ -12,6 +12,7 @@ function define(name, value) {
 serverEmitterMTypes = {
     createdRoom: 0,
     activeRooms: 1,
+    leftRoom: 2,
 };
 
 const clientMessageTypes = {
@@ -21,6 +22,7 @@ const clientMessageTypes = {
     joinMatch: 3,
     endMatch: 4,
     getActiveRooms: 5,
+    leaveRoom: 6,
 };
 
 const createRoomErrors = {
@@ -31,6 +33,8 @@ const createRoomErrors = {
 const roomsMessageTypes = {
     createdRoom: 0,
     madeMove: 1,
+    leftRoom: 2,
+    playerRemoved: 3,
 };
 
 const createMatchFields = [
