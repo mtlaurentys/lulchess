@@ -1,5 +1,12 @@
 # DEVLOG
 
+### 24/11/2020
+
+### 23/11/2020
+
+Player leaving current room
+Player joining open room
+
 ### 09/11/2020
 
 Started active room display on client side
