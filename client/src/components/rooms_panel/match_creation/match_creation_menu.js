@@ -44,6 +44,7 @@ class MatchCreationMenu extends React.Component {
     }
 
     UpdateTeamSize(newTeamSizes) {
+        console.log("called");
         this.setState({ teamSize: newTeamSizes });
     }
 

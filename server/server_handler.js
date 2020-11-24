@@ -52,6 +52,7 @@ class LCServer {
         console.log(
             "SENT MESSAGE: " + messageType + " " + JSON.stringify(infoObject)
         );
+        if (!this.clients[cID]) return;
         this.clients[cID].send(messageType + " " + JSON.stringify(infoObject));
     }
 
