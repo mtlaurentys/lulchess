@@ -26,19 +26,16 @@ class App extends React.Component {
             },
             SetServerCallback: this.serverHandler.GetCallbackSetter(),
         };
-        this.AssignMessageTypes = this.AssignMessageTypes.bind(this);
+        this.AssignID = this.AssignID.bind(this);
     }
 
     componentDidMount() {
-        this.state.SetServerCallback(
-            "clientMessageTypes",
-            this.AssignMessageTypes
-        );
+        this.state.SetServerCallback("uID", this.AssignID);
         this.serverHandler.Connect();
     }
 
-    AssignMessageTypes(types) {
-        this.setState({ messageTypes: types });
+    AssignID(uID) {
+        this.setState({ sessionID: uID });
     }
 
     RenderLoad() {
@@ -51,7 +48,7 @@ class App extends React.Component {
     }
 
     render() {
-        if (this.state.messageTypes === null) return this.RenderLoad();
+        if (this.state.sessionID === null) return this.RenderLoad();
         return (
             <React.StrictMode>
                 <div className="App">

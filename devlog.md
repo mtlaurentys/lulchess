@@ -2,6 +2,8 @@
 
 ### 24/11/2020
 
+Server and Client websocket requests documentation
+
 ### 23/11/2020
 
 Player leaving current room

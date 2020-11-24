@@ -9,12 +9,9 @@ class Room {
         this.players = [player1];
         this.lock = new RWLock();
         this.active = false;
+        this.id = rID;
         this.AddPlayer = this.AddPlayer.bind(this);
         this.StartMatch = this.StartMatch.bind(this);
-        this.eventEmitter.on("player_joined", (player) => {
-            this.AddPlayer(player);
-        });
-        this.id = rID;
         this.GetInfo = this.GetInfo.bind(this);
     }
 
@@ -31,7 +28,6 @@ class Room {
     AddPlayer(player) {
         let added = false;
         this.lock.writeLock((release) => {
-            print("len: " + this.players.length + "max" + this.numPlayers);
             if (this.players.length < this.numPlayers) {
                 this.players.push(player);
                 added = true;
@@ -44,11 +40,8 @@ class Room {
                 );
             }
         });
-        if (added)
-            if (this.players.length == this.numPlayers) {
-                this.eventEmitter.emit("room_full");
-                this.StartMatch();
-            }
+        if (added && this.players.length == this.numPlayers)
+            this.eventEmitter.emit("start_match");
         return added;
     }
 

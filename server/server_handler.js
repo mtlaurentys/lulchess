@@ -49,9 +49,6 @@ class LCServer {
     }
 
     SendMessage(messageType, cID, infoObject) {
-        console.log(
-            "SENT MESSAGE: " + messageType + " " + JSON.stringify(infoObject)
-        );
         if (!this.clients[cID]) return;
         this.clients[cID].send(messageType + " " + JSON.stringify(infoObject));
     }
@@ -65,10 +62,7 @@ class LCServer {
             this.HandleMessage(userID, event);
         });
         connection.on("close", (a, b) => this.CloseConnection(userID, a, b));
-        connection.send(
-            "clientMessageTypes " + JSON.stringify(clientMessageTypes)
-        );
-        connection.send("ID " + userID);
+        this.SendMessage("uID", userID, userID);
     }
 
     CloseConnection(id, code, reason) {

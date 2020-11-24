@@ -49,7 +49,7 @@ class RoomManager {
                 this.lobbyEmitter.emit(roomsMessageTypes.playerRemoved, {
                     uID: uID,
                 });
-                this.openRooms[room].RemovePlayer(uID);
+                this.openRooms[rID].RemovePlayer(uID);
                 delete this.inGame[uID];
             }
             release();
@@ -74,10 +74,8 @@ class RoomManager {
         if (rID == null) return false; // TODO: implement param matching
         let joined = false;
         this.lock.writeLock((release) => {
-            if (!this.openRooms[rID].room.GetInfo().active) {
+            if (!this.openRooms[rID].room.GetInfo().active)
                 joined = this.openRooms[rID].room.AddPlayer(uID);
-                release();
-            }
             release();
         });
         return joined;

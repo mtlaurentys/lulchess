@@ -18,13 +18,10 @@ serverEmitterMTypes = {
 
 const clientMessageTypes = {
     getPieces: 0,
-    getInterpreter: 1,
-    createMatch: 2,
-    joinMatch: 3,
-    endMatch: 4,
-    getActiveRooms: 5,
-    leaveRoom: 6,
-    tryJoin: 7,
+    createMatch: 1,
+    getActiveRooms: 2,
+    leaveRoom: 3,
+    tryJoin: 4,
 };
 
 const createRoomErrors = {
