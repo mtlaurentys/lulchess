@@ -3,6 +3,7 @@
 ### 24/11/2020
 
 Server and Client websocket requests documentation
+Readmes and Licenses
 
 ### 23/11/2020
 

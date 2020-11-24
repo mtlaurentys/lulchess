@@ -1,9 +1,10 @@
 /*
- *
+ * This file defines and implements the LobbyManager class.
+ * The LobbyManager is the initial point that client requests, with respect to
+ *  rooms, are dealt with.
  */
 
 const EventEmitter = require("events");
-
 const RoomManager = require("./room_manager");
 const clientMessageTypes = require("./constants").clientMessageTypes;
 const roomsMessageTypes = require("./constants").roomsMessageTypes;
@@ -20,15 +21,12 @@ class LobbyManager {
         this.HandleRoomMessage = this.HandleRoomMessage.bind(this);
         this.RemoveUser = this.RemoveUser.bind(this);
         this.CreateMatch = this.CreateMatch.bind(this);
-        this.LeaveRoom = this.LeaveRoom.bind(this);
         // Standard messages
-        this.serverEmitter.on("client_message", (a, b, c) => {
-            this.HandleClientMessage(a, b, c);
-        });
         this.lobbyEmitter.on("rooms_message", this.HandleRoomMessage);
         this.lobbyEmitter.on(roomsMessageTypes.playerRemoved, (uID) => {
             this.serverEmitter.emit(serverEmitterMTypes.leftRoom, uID);
         });
+        this.serverEmitter.on("client_message", this.HandleClientMessage);
         this.serverEmitter.on("user_disconnected", this.RemoveUser);
     }
 
@@ -43,20 +41,6 @@ class LobbyManager {
             return;
         }
         let room = this.roomManager.CreateRoom(params, uID);
-    }
-
-    LeaveRoom(uID) {
-        console.log("aqui");
-        this.roomManager.RemoveUser(uID);
-    }
-
-    SupplyActiveRooms(cID) {
-        console.log("SUPPLIED!");
-        this.serverEmitter.emit(
-            serverEmitterMTypes.activeRooms,
-            cID,
-            this.roomManager.GetInfo()
-        );
     }
 
     HandleRoomMessage(messType, info) {
@@ -83,15 +67,17 @@ class LobbyManager {
         switch (messType) {
             case clientMessageTypes.createMatch:
                 this.CreateMatch(uID, params);
-            case clientMessageTypes.joinMatch:
-                break;
-            case clientMessageTypes.endMatch:
-                break;
             case clientMessageTypes.getActiveRooms:
-                this.SupplyActiveRooms(uID);
+                (uID) => {
+                    this.serverEmitter.emit(
+                        serverEmitterMTypes.activeRooms,
+                        cID,
+                        this.roomManager.GetInfo()
+                    );
+                };
                 break;
             case clientMessageTypes.leaveRoom:
-                this.LeaveRoom(uID);
+                this.roomManager.RemoveUser(uID);
                 break;
             case clientMessageTypes.tryJoin:
                 this.serverEmitter.emit(
