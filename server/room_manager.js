@@ -7,7 +7,7 @@ const { setTimeout } = require("timers");
 const MatchManager = require("./match_manager");
 const Room = require("./room");
 const createErrors = require("./constants").createRoomErrors;
-const roomsMessageTypes = require("./constants").roomsMessageTypes;
+const lobbyEmitterMTypes = require("./constants").lobbyEmitterMTypes;
 
 const ROUGH_MAX_ROOMS = 5;
 const print = console.log;
@@ -40,13 +40,13 @@ class RoomManager {
                 this.availableRooms.push(rID);
                 rInfo.players.forEach((player) => {
                     this.lobbyEmitter.emit(
-                        roomsMessageTypes.playerRemoved,
+                        lobbyEmitterMTypes.playerRemoved,
                         player
                     );
                     delete this.inGame[player];
                 });
             } else {
-                this.lobbyEmitter.emit(roomsMessageTypes.playerRemoved, {
+                this.lobbyEmitter.emit(lobbyEmitterMTypes.playerRemoved, {
                     uID: uID,
                 });
                 this.openRooms[rID].RemovePlayer(uID);
@@ -98,14 +98,11 @@ class RoomManager {
             rID = this.MakeRoomID();
             release();
         });
-        let em = new EventEmitter();
-        let nRoom = new Room(em, roomSpecs, uID, rID);
-        this.openRooms[rID] = { room: nRoom, emitter: em };
+        let roomEmitter = new EventEmitter();
+        let nRoom = new Room(roomEmitter, roomSpecs, uID, rID);
+        this.openRooms[rID] = { room: nRoom, emitter: roomEmitter };
         this.inGame[uID] = rID;
-        this.lobbyEmitter.emit("rooms_message", roomsMessageTypes.createdRoom, {
-            uid: uID,
-            rid: rID,
-        });
+        this.lobbyEmitter.emit(lobbyEmitterMTypes.createdRoom, uID, rID);
     }
 }
 

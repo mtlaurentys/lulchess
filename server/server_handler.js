@@ -7,9 +7,8 @@ const webSocketServer = require("websocket").server;
 const http = require("http");
 
 // Server Configuration
-const servConsts = require("./constants");
-const webSocketsServerPort = servConsts.webSocketsServerPort;
-const clientMTypes = servConsts.clientMTypes;
+const webSocketsServerPort = require("./constants").webSocketsServerPort;
+const clientMTypes = require("./constants").clientMTypes;
 const appEmitterMTypes = require("./constants").appEmitterMTypes;
 
 //Helper
@@ -67,7 +66,7 @@ class LCServer {
 
     CloseConnection(uID, code, reason) {
         print("LEAVING: " + uID);
-        this.appEmitter.emit("user_disconnected", uID);
+        this.appEmitter.emit(appEmitterMTypes.userDisconnected, uID);
         delete this.clients[uID];
     }
 
@@ -79,31 +78,21 @@ class LCServer {
             return;
         }
         let mType = params.messageType;
-        if (!clientMTypes.hasOwnProperty(mType)) {
-            console.log("Bad Request. Ignoring...");
-            return;
-        }
         console.log("Good Request");
         console.log(params);
-        switch (clientMTypes.mType) {
+        switch (clientMTypes[mType]) {
             case clientMTypes.getPieces:
                 break;
             case clientMTypes.createMatch:
-                this.appEmitter.emit(
-                    appEmitterMTypes.createMatch,
-                    cnID,
-                    params
-                );
+                this.appEmitter.emit(appEmitterMTypes[mType], cnID, params);
                 break;
             case clientMTypes.getActiveRooms:
-                this.appEmitter.emit(
-                    appEmitterMTypes.activeRooms,
-                    cnID,
-                    params
-                );
-
+            case clientMTypes.leaveRoom:
+            case clientMTypes.tryJoin:
+                this.appEmitter.emit(appEmitterMTypes[mType], cnID);
+                break;
             default:
-                this.appEmitter.emit(appEmitterMTypes[mType], cnID, params);
+                print("Unhandled client message -> client bug? " + mType);
         }
     }
 }
