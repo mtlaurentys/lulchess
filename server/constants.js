@@ -31,6 +31,8 @@ const appEmitterMTypes = {
     joinedStatus: 7,
     activeRooms: 8,
     userDisconnected: 9,
+    startMatch: 10,
+    tellDetails: 11,
 };
 
 const lobbyEmitterMTypes = {
@@ -38,6 +40,16 @@ const lobbyEmitterMTypes = {
     madeMove: 1,
     leftRoom: 2,
     playerRemoved: 3,
+    startMatch: 4,
+};
+
+const matchEmitterMTypes = {
+    tellDetails: 0,
+};
+
+const roomEmitterMTypes = {
+    startMatch: 0,
+    roomReady: 1,
 };
 
 const createRoomErrors = {
@@ -62,4 +74,5 @@ define("lobbyEmitterMTypes", lobbyEmitterMTypes);
 define("createRoomErrors", createRoomErrors);
 define("createMatchFields", createMatchFields);
 define("appEmitterMTypes", appEmitterMTypes);
+define("roomEmitterMTypes", roomEmitterMTypes);
 define("webSocketsServerPort", 8000);

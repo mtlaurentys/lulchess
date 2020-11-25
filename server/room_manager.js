@@ -8,6 +8,7 @@ const MatchManager = require("./match_manager");
 const Room = require("./room");
 const createErrors = require("./constants").createRoomErrors;
 const lobbyEmitterMTypes = require("./constants").lobbyEmitterMTypes;
+const roomEmitterMTypes = require("./constants").roomEmitterMTypes;
 
 const ROUGH_MAX_ROOMS = 5;
 const print = console.log;
@@ -99,6 +100,9 @@ class RoomManager {
             release();
         });
         let roomEmitter = new EventEmitter();
+        roomEmitter.on(roomEmitterMTypes.startMatch, (match) => {
+            this.lobbyEmitter.emit(lobbyEmitterMTypes.startMatch, match);
+        });
         let nRoom = new Room(roomEmitter, roomSpecs, uID, rID);
         this.openRooms[rID] = { room: nRoom, emitter: roomEmitter };
         this.inGame[uID] = rID;

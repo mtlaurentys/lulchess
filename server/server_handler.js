@@ -45,6 +45,15 @@ class LCServer {
                 else this.SendMessage("notJoin", cID, "");
             }
         );
+        this.appEmitter.on(
+            appEmitterMTypes.tellDetails,
+            (cID, listPlayers, col) => {
+                this.SendMessage("matchStarted", player, {
+                    players: listPlayers,
+                    color: col,
+                });
+            }
+        );
     }
 
     SendMessage(messageType, cID, infoObject) {
@@ -84,11 +93,11 @@ class LCServer {
             case clientMTypes.getPieces:
                 break;
             case clientMTypes.createMatch:
+            case clientMTypes.tryJoin:
                 this.appEmitter.emit(appEmitterMTypes[mType], cnID, params);
                 break;
             case clientMTypes.getActiveRooms:
             case clientMTypes.leaveRoom:
-            case clientMTypes.tryJoin:
                 this.appEmitter.emit(appEmitterMTypes[mType], cnID);
                 break;
             default:

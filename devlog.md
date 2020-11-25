@@ -1,5 +1,10 @@
 # DEVLOG
 
+### 25/11/2020
+
+Refactored all event emitters and better named messages
+Player cannot joint its own room
+
 ### 24/11/2020
 
 Server and Client websocket requests documentation

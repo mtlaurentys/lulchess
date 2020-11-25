@@ -5,15 +5,17 @@
  */
 
 const { EventEmitter } = require("events");
-
 var RWLock = require("rwlock");
+
 const createErrors = require("./constants").createRoomErrors;
+const roomEmitterMTypes = require("./constants").roomEmitterMTypes;
+
 const Match = require("./match");
 const print = console.log;
 
 class Room {
-    constructor(managerEmitter, matchParams, player1, rID) {
-        this.managerEmitter = managerEmitter;
+    constructor(roomEmitter, matchParams, player1, rID) {
+        this.roomEmitter = roomEmitter;
         this.matchEmitter = null;
         this.match = null;
 
@@ -29,7 +31,7 @@ class Room {
         this.StartMatch = this.StartMatch.bind(this);
         this.GetInfo = this.GetInfo.bind(this);
 
-        this.managerEmitter.on("start_match", this.StartMatch);
+        this.roomEmitter.on(roomEmitterMTypes.roomReady, this.StartMatch);
     }
 
     GetInfo() {
@@ -51,14 +53,14 @@ class Room {
                 release();
             } else {
                 release();
-                this.managerEmitter.emit(
+                this.roomEmitter.emit(
                     "create_room_error",
                     createErrors.roomFull
                 );
             }
         });
         if (added && this.players.length == this.numPlayers)
-            this.managerEmitter.emit("start_match");
+            this.roomEmitter.emit(roomEmitterMTypes.roomReady);
         return added;
     }
 
@@ -80,9 +82,10 @@ class Room {
         this.active = true;
         this.matchEmitter = new EventEmitter();
         this.matchEmitter.on("match_ready", () => {
-            this.managerEmitter.emit("match");
+            this.roomEmitter.emit("match");
         });
-        this.match = new Match(this.matchEmitter, this.mParams);
+        this.match = new Match(this.matchEmitter, this.mParams, this.players);
+        this.roomEmitter.emit(roomEmitterMTypes.startMatch, this.match);
     }
 }
 
