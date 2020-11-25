@@ -55,6 +55,7 @@ class App extends React.Component {
                     <NavBar id="navBar"></NavBar>
                     <RoomPanel
                         id="roomPanel"
+                        rID={this.state.room.roomID}
                         inRoom={this.state.inRoom}
                         serverHandler={this.serverHandler}
                         SetServerCallback={this.state.SetServerCallback}
@@ -62,9 +63,13 @@ class App extends React.Component {
                     <ActiveRoom
                         serverHandler={this.serverHandler}
                         SetServerCallback={this.state.SetServerCallback}
-                        tellUpdate={(activeRoom) => {
+                        tellUpdate={(activeRoom, rID) => {
                             if (activeRoom !== this.state.inRoom)
-                                this.setState({ inRoom: activeRoom });
+                                this.setState({
+                                    inRoom: activeRoom,
+                                    room: { roomID: rID },
+                                });
+                            print("rID: " + this.state.room.roomID);
                         }}
                     />
                 </div>

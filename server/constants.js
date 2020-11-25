@@ -9,14 +9,15 @@ function define(name, value) {
     });
 }
 
-serverEmitterMTypes = {
+const appEmitterMTypes = {
     createdRoom: 0,
     activeRooms: 1,
     leftRoom: 2,
     joinedStatus: 3,
+    createMatch: 4,
 };
 
-const clientMessageTypes = {
+const clientMTypes = {
     getPieces: 0,
     createMatch: 1,
     getActiveRooms: 2,
@@ -48,9 +49,9 @@ const createMatchFields = [
     "fixedPowers",
 ];
 
-define("clientMessageTypes", clientMessageTypes);
+define("clientMTypes", clientMTypes);
 define("roomsMessageTypes", roomsMessageTypes);
 define("createRoomErrors", createRoomErrors);
 define("createMatchFields", createMatchFields);
-define("serverEmitterMTypes", serverEmitterMTypes);
+define("appEmitterMTypes", appEmitterMTypes);
 define("webSocketsServerPort", 8000);

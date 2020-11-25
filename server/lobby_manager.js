@@ -6,32 +6,31 @@
 
 const EventEmitter = require("events");
 const RoomManager = require("./room_manager");
+
 const clientMessageTypes = require("./constants").clientMessageTypes;
 const roomsMessageTypes = require("./constants").roomsMessageTypes;
-const serverEmitterMTypes = require("./constants").serverEmitterMTypes;
+const appEmitterMTypes = require("./constants").appEmitterMTypes;
 const print = console.log;
 
 class LobbyManager {
-    constructor(serverEmitter) {
+    constructor(appEmitter) {
         this.lobbyEmitter = new EventEmitter();
         this.roomManager = new RoomManager(this.lobbyEmitter);
-        this.serverEmitter = serverEmitter;
+        this.appEmitter = appEmitter;
         // Functions binding
         this.HandleClientMessage = this.HandleClientMessage.bind(this);
         this.HandleRoomMessage = this.HandleRoomMessage.bind(this);
-        this.RemoveUser = this.RemoveUser.bind(this);
         this.CreateMatch = this.CreateMatch.bind(this);
         // Standard messages
         this.lobbyEmitter.on("rooms_message", this.HandleRoomMessage);
         this.lobbyEmitter.on(roomsMessageTypes.playerRemoved, (uID) => {
-            this.serverEmitter.emit(serverEmitterMTypes.leftRoom, uID);
+            this.appEmitter.emit(appEmitterMTypes.leftRoom, uID);
         });
-        this.serverEmitter.on("client_message", this.HandleClientMessage);
-        this.serverEmitter.on("user_disconnected", this.RemoveUser);
-    }
-
-    RemoveUser(uID) {
-        this.roomManager.RemoveUser(uID);
+        this.appEmitter.on(appEmitterMTypes.createdRoom, () => {
+            print("funcionou!!!");
+        });
+        this.appEmitter.on("client_message", this.HandleClientMessage);
+        this.appEmitter.on("user_disconnected", this.roomManager.RemoveUser);
     }
 
     CreateMatch(uID, params) {
@@ -46,17 +45,14 @@ class LobbyManager {
     HandleRoomMessage(messType, info) {
         switch (messType) {
             case roomsMessageTypes.createdRoom:
-                this.serverEmitter.emit(
-                    serverEmitterMTypes.createdRoom,
+                this.appEmitter.emit(
+                    appEmitterMTypes.createdRoom,
                     info.uid,
                     info.rid
                 );
                 break;
             case roomsMessageTypes.playerRemoved:
-                this.serverEmitter.emit(
-                    serverEmitterMTypes.createdRoom,
-                    info.uid
-                );
+                this.appEmitter.emit(appEmitterMTypes.createdRoom, info.uid);
                 break;
             default:
                 print("Unknown rooms message type. Ignoring...");
@@ -67,27 +63,27 @@ class LobbyManager {
         switch (messType) {
             case clientMessageTypes.createMatch:
                 this.CreateMatch(uID, params);
+                break;
             case clientMessageTypes.getActiveRooms:
-                (uID) => {
-                    this.serverEmitter.emit(
-                        serverEmitterMTypes.activeRooms,
-                        cID,
-                        this.roomManager.GetInfo()
-                    );
-                };
+                this.appEmitter.emit(
+                    appEmitterMTypes.activeRooms,
+                    uID,
+                    this.roomManager.GetInfo()
+                );
                 break;
             case clientMessageTypes.leaveRoom:
                 this.roomManager.RemoveUser(uID);
                 break;
             case clientMessageTypes.tryJoin:
-                this.serverEmitter.emit(
-                    serverEmitterMTypes.joinedStatus,
+                this.appEmitter.emit(
+                    appEmitterMTypes.joinedStatus,
                     uID,
                     this.roomManager.TryJoin(uID, params.rID),
                     params.rID
                 );
                 break;
             default:
+                print("Erro");
         }
     }
 }

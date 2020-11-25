@@ -11,9 +11,9 @@ const LobbyManager = require("./lobby_manager");
 
 class Apllication {
     constructor() {
-        this.eventHandler = new EventEmitter(); // Used to server-lobby comm
-        this.server = new LCServer(this.eventHandler);
-        this.lobby = new LobbyManager(this.eventHandler);
+        this.appEmitter = new EventEmitter(); // Used to server-lobby comm
+        this.server = new LCServer(this.appEmitter);
+        this.lobby = new LobbyManager(this.appEmitter);
     }
 }
 

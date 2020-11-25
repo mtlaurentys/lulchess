@@ -79,6 +79,9 @@ class Room {
     StartMatch() {
         this.active = true;
         this.matchEmitter = new EventEmitter();
+        this.matchEmitter.on("match_ready", () => {
+            this.managerEmitter.emit("match");
+        });
         this.match = new Match(this.matchEmitter, this.mParams);
     }
 }

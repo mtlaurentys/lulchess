@@ -76,6 +76,7 @@ class RoomPanel extends React.Component {
                 return (
                     <Lobby
                         id="listOfRooms"
+                        rID={this.props.rID}
                         TryJoin={this.TryJoin}
                         SetServerCallback={this.SetServerCallback}
                         requestUpdate={this.GetActiveRooms}

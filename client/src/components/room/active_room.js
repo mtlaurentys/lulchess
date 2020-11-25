@@ -22,15 +22,16 @@ class ActiveRoom extends React.Component {
     componentDidMount() {
         this.SetServerCallback("createdRoom", (rID) => {
             this.setState({ finding: true, id: rID });
-            this.tellUpdate(true);
+            this.tellUpdate(true, rID);
         });
         this.SetServerCallback("leftRoom", () => {
             this.setState({ finding: false, id: null });
-            this.tellUpdate(false);
+            this.tellUpdate(false, null);
         });
         this.SetServerCallback("joined", (message) => {
-            this.setState({ finding: true, id: JSON.parse(message) });
-            this.tellUpdate(true);
+            let rID = JSON.parse(message);
+            this.setState({ finding: true, id: rID });
+            this.tellUpdate(true, rID);
         });
     }
 

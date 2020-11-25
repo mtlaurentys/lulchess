@@ -58,10 +58,8 @@ class RoomManager {
 
     GetInfo() {
         let info = [];
-        for (const roomID in this.openRooms) {
-            print(this.openRooms[roomID]);
+        for (const roomID in this.openRooms)
             info.push(this.openRooms[roomID].room.GetInfo());
-        }
         return info;
     }
 

@@ -1,5 +1,7 @@
 import React from "react";
 
+import "./lobby.css";
+
 const print = console.log;
 
 class Lobby extends React.Component {
@@ -7,10 +9,12 @@ class Lobby extends React.Component {
         super(props);
         this.state = {
             activeRooms: [],
+            rID: props.rID,
         };
         this.requestRoomUpdate = props.requestUpdate;
         this.TryJoin = props.TryJoin;
         this.SetServerCallback = props.SetServerCallback;
+        print("Initial: " + this.state.rID);
     }
 
     componentDidMount() {
@@ -21,16 +25,23 @@ class Lobby extends React.Component {
         this.SetServerCallback("notJoin", () => alert("could not join"));
     }
 
+    renderRoomItem(rID) {
+        if (rID != this.state.rID)
+            return <button onClick={() => this.TryJoin(rID)}>{rID}</button>;
+        else
+            return (
+                <button className="ownMatch" disabled>
+                    {rID}
+                </button>
+            );
+    }
+
     render() {
         if (this.state.activeRooms.length) {
             return (
                 <ul>
                     {this.state.activeRooms.map((room) => (
-                        <li key={room.id}>
-                            <button onClick={() => this.TryJoin(room.id)}>
-                                {room.id}
-                            </button>
-                        </li>
+                        <li key={room.id}>{this.renderRoomItem(room.id)}</li>
                     ))}
                 </ul>
             );

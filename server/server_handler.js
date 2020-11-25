@@ -9,38 +9,38 @@ const http = require("http");
 // Server Configuration
 const servConsts = require("./constants");
 const webSocketsServerPort = servConsts.webSocketsServerPort;
-const clientMessageTypes = servConsts.clientMessageTypes;
-const roomsMessageTypes = require("./constants").roomsMessageTypes;
+const clientMTypes = servConsts.clientMTypes;
+const appEmitterMTypes = require("./constants").appEmitterMTypes;
 
 //Helper
 const print = console.log;
 
 class LCServer {
-    constructor(serverEmitter) {
+    constructor(appEmitter) {
         this.server = http.createServer();
         this.server.listen(webSocketsServerPort);
         this.wsServer = new webSocketServer({
             httpServer: this.server,
         });
         this.clients = {};
-        this.serverEmitter = serverEmitter;
+        this.appEmitter = appEmitter;
 
         this.HandleMessage = this.HandleMessage.bind(this);
         this.ReceiveNewConnection = this.ReceiveNewConnection.bind(this);
         this.SendMessage = this.SendMessage.bind(this);
 
         this.wsServer.on("request", this.ReceiveNewConnection);
-        this.serverEmitter.on(serverEmitterMTypes.activeRooms, (cID, rooms) =>
+        this.appEmitter.on(appEmitterMTypes.activeRooms, (cID, rooms) =>
             this.SendMessage("activeRooms", cID, rooms)
         );
-        this.serverEmitter.on(serverEmitterMTypes.createdRoom, (cID, rID) =>
+        this.appEmitter.on(appEmitterMTypes.createdRoom, (cID, rID) =>
             this.SendMessage("createdRoom", cID, rID)
         );
-        this.serverEmitter.on(serverEmitterMTypes.leftRoom, (cID) =>
+        this.appEmitter.on(appEmitterMTypes.leftRoom, (cID) =>
             this.SendMessage("leftRoom", cID, "")
         );
-        this.serverEmitter.on(
-            serverEmitterMTypes.joinedStatus,
+        this.appEmitter.on(
+            appEmitterMTypes.joinedStatus,
             (cID, status, rID) => {
                 if (status) this.SendMessage("joined", cID, rID);
                 else this.SendMessage("notJoin", cID, "");
@@ -54,21 +54,21 @@ class LCServer {
     }
 
     ReceiveNewConnection(request) {
-        let userID = getID();
+        let uID = getID();
         const connection = request.accept(null, request.origin);
-        this.clients[userID] = connection;
-        console.log("NEW CONNECTION: " + userID);
+        this.clients[uID] = connection;
+        console.log("NEW CONNECTION: " + uID);
         connection.on("message", (event) => {
-            this.HandleMessage(userID, event);
+            this.HandleMessage(uID, event);
         });
-        connection.on("close", (a, b) => this.CloseConnection(userID, a, b));
-        this.SendMessage("uID", userID, userID);
+        connection.on("close", (a, b) => this.CloseConnection(uID, a, b));
+        this.SendMessage("uID", uID, uID);
     }
 
-    CloseConnection(id, code, reason) {
-        print("LEAVING: " + id);
-        this.serverEmitter.emit("user_disconnected", id);
-        delete this.clients[id];
+    CloseConnection(uID, code, reason) {
+        print("LEAVING: " + uID);
+        this.appEmitter.emit("user_disconnected", uID);
+        delete this.clients[uID];
     }
 
     HandleMessage(cnID, event) {
@@ -79,25 +79,32 @@ class LCServer {
             return;
         }
         let mType = params.messageType;
-        if (!clientMessageTypes.hasOwnProperty(mType)) {
+        if (!clientMTypes.hasOwnProperty(mType)) {
             console.log("Bad Request. Ignoring...");
             return;
         }
         console.log("Good Request");
-        switch (clientMessageTypes.mType) {
-            case clientMessageTypes.getPieces:
+        console.log(params);
+        switch (clientMTypes.mType) {
+            case clientMTypes.getPieces:
                 break;
-            case clientMessageTypes.getInterpreter:
-                break;
-            default:
-                this.serverEmitter.emit(
-                    "client_message",
+            case clientMTypes.createMatch:
+                this.appEmitter.emit(
+                    appEmitterMTypes.createMatch,
                     cnID,
-                    clientMessageTypes[mType],
                     params
                 );
+                break;
+            case clientMTypes.getActiveRooms:
+                this.appEmitter.emit(
+                    appEmitterMTypes.activeRooms,
+                    cnID,
+                    params
+                );
+
+            default:
+                this.appEmitter.emit(appEmitterMTypes[mType], cnID, params);
         }
-        console.log(params);
     }
 }
 
