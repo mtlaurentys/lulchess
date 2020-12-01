@@ -2,13 +2,13 @@ import React from "react";
 
 import "./match.css";
 
-const baseBoard = require("../../../constants/constants").initialBoard;
+const baseBoard = require("../../constants/constants").initialBoard;
 const print = console.log;
 
 class Match extends React.Component {
     constructor(props) {
         super(props);
-        brd = [];
+        let brd = [];
         baseBoard.forEach((row) => {
             let r = [];
             row.forEach((piece) => r.push(piece));

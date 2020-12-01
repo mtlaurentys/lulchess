@@ -48,7 +48,7 @@ class LCServer {
         this.appEmitter.on(
             appEmitterMTypes.tellDetails,
             (cID, listPlayers, col) => {
-                this.SendMessage("matchStarted", player, {
+                this.SendMessage("matchStarted", cID, {
                     players: listPlayers,
                     color: col,
                 });

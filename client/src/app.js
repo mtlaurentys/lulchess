@@ -20,10 +20,7 @@ class App extends React.Component {
             messageTypes: null,
             sessionID: null,
             inRoom: false,
-            room: {
-                lookingForMatch: false,
-                roomID: null,
-            },
+            roomID: null,
             SetServerCallback: this.serverHandler.GetCallbackSetter(),
         };
         this.AssignID = this.AssignID.bind(this);
@@ -55,7 +52,7 @@ class App extends React.Component {
                     <NavBar id="navBar"></NavBar>
                     <RoomPanel
                         id="roomPanel"
-                        rID={this.state.room.roomID}
+                        rID={this.state.roomID}
                         inRoom={this.state.inRoom}
                         serverHandler={this.serverHandler}
                         SetServerCallback={this.state.SetServerCallback}
@@ -67,9 +64,8 @@ class App extends React.Component {
                             if (activeRoom !== this.state.inRoom)
                                 this.setState({
                                     inRoom: activeRoom,
-                                    room: { roomID: rID },
+                                    roomID: rID,
                                 });
-                            print("rID: " + this.state.room.roomID);
                         }}
                     />
                 </div>

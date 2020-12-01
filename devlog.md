@@ -1,5 +1,10 @@
 # DEVLOG
 
+### 01/12/2020
+
+Added a diagram to server documentation.
+Match actualy starts and is displayed on client side.
+
 ### 25/11/2020
 
 Refactored all event emitters and better named messages

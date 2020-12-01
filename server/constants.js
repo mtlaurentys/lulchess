@@ -75,4 +75,5 @@ define("createRoomErrors", createRoomErrors);
 define("createMatchFields", createMatchFields);
 define("appEmitterMTypes", appEmitterMTypes);
 define("roomEmitterMTypes", roomEmitterMTypes);
+define("matchEmitterMTypes", matchEmitterMTypes);
 define("webSocketsServerPort", 8000);

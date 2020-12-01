@@ -9,6 +9,7 @@ var RWLock = require("rwlock");
 
 const createErrors = require("./constants").createRoomErrors;
 const roomEmitterMTypes = require("./constants").roomEmitterMTypes;
+const matchEmitterMTypes = require("./constants").matchEmitterMTypes;
 
 const Match = require("./match");
 const print = console.log;
@@ -81,9 +82,6 @@ class Room {
     StartMatch() {
         this.active = true;
         this.matchEmitter = new EventEmitter();
-        this.matchEmitter.on("match_ready", () => {
-            this.roomEmitter.emit("match");
-        });
         this.match = new Match(this.matchEmitter, this.mParams, this.players);
         this.roomEmitter.emit(roomEmitterMTypes.startMatch, this.match);
     }

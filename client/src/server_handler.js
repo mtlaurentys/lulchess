@@ -25,7 +25,6 @@ class ServerHandler {
     }
 
     SetCallback(key, cbFunc) {
-        print(cbFunc);
         this.callbacks[key] = cbFunc;
     }
 
@@ -43,12 +42,16 @@ class ServerHandler {
         let mes = message.data;
         let divider = mes.indexOf(" ");
         let firstWord = mes.substring(0, divider);
-        print("RECEIVED:\n" + message);
+        print("RECEIVED:\n" + JSON.stringify(message.data));
         switch (firstWord) {
             case "ID":
                 console.log("ID: " + mes.substring(divider, mes.lenght));
                 break;
             default:
+                if (!this.callbacks.hasOwnProperty(firstWord)) {
+                    print("Serve message not handled: " + firstWord);
+                    return;
+                }
                 this.callbacks[firstWord](
                     JSON.parse(mes.substring(divider, mes.lenght))
                 );

@@ -25,9 +25,9 @@ class LobbyManager {
         this.lobbyEmitter.on(lobbyEmitterMTypes.createdRoom, (uID, rID) => {
             this.appEmitter.emit(appEmitterMTypes.createdRoom, uID, rID);
         });
-        this.lobbyEmitter.on(lobbyEmitterMTypes.startMatch, (match) => {
-            this.appEmitter.emit(appEmitterMTypes.startMatch, match);
-        });
+        this.lobbyEmitter.on(lobbyEmitterMTypes.startMatch, (match) =>
+            this.appEmitter.emit(appEmitterMTypes.startMatch, match)
+        );
         this.appEmitter.on(appEmitterMTypes.createMatch, this.CreateMatch);
         this.appEmitter.on(appEmitterMTypes.getActiveRooms, (uID) => {
             this.appEmitter.emit(
@@ -55,14 +55,9 @@ class LobbyManager {
     }
 
     CreateMatch(uID, params) {
-        print("Entrou para criar");
         print(uID);
         let result = this.roomManager.TryJoin(uID, null, params);
-        if (result) {
-            console.log("Joined existing match");
-            return;
-        }
-        let room = this.roomManager.CreateRoom(params, uID);
+        if (!result) this.roomManager.CreateRoom(params, uID);
     }
 }
 

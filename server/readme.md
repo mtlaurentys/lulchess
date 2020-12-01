@@ -48,6 +48,14 @@
     the requested room. Usually it means the room became full or was deleted in
     the meantime.
 
+- `"matchStarted"`, when client is in a room that the match started.
+
+    This message is sent together with the list of players IDs, and the color
+    (white or black) of the player.
+
+    It is important to notice that this may be sent before the `"joined"` or
+    even the `"created"` base replies.
+
 ---
 
 ### Interprets

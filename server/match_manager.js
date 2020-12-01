@@ -9,6 +9,8 @@ const EventEmitter = require("events");
 const appEmitterMTypes = require("./constants").appEmitterMTypes;
 const matchEmitterMTypes = require("./constants").matchEmitterMTypes;
 
+const print = console.log;
+
 class MatchManager {
     constructor(appEmitter) {
         this.appEmitter = appEmitter;
@@ -17,20 +19,20 @@ class MatchManager {
 
         this.StartMatch = this.StartMatch.bind(this);
 
-        this.appEmitter.on(appEmitterMTypes.startMatch);
+        this.appEmitter.on(appEmitterMTypes.startMatch, this.StartMatch);
     }
 
     StartMatch(match) {
         let players, mEm;
         [players, mEm] = match.Connect(getID());
-        mEm.on(matchEmitterMTypes.tellDetails, (uID, listP, color) =>
+        mEm.on(matchEmitterMTypes.tellDetails, (uID, listP, color) => {
             this.appEmitter.emit(
                 appEmitterMTypes.tellDetails,
                 uID,
                 listP,
                 color
-            )
-        );
+            );
+        });
         this.players[mEm] = players;
         players.forEach((p) => (this.matches[p] = mEm));
         match.Start();

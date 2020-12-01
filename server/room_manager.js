@@ -100,9 +100,9 @@ class RoomManager {
             release();
         });
         let roomEmitter = new EventEmitter();
-        roomEmitter.on(roomEmitterMTypes.startMatch, (match) => {
-            this.lobbyEmitter.emit(lobbyEmitterMTypes.startMatch, match);
-        });
+        roomEmitter.on(roomEmitterMTypes.startMatch, (match) =>
+            this.lobbyEmitter.emit(lobbyEmitterMTypes.startMatch, match)
+        );
         let nRoom = new Room(roomEmitter, roomSpecs, uID, rID);
         this.openRooms[rID] = { room: nRoom, emitter: roomEmitter };
         this.inGame[uID] = rID;

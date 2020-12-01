@@ -31,7 +31,7 @@ class Match {
     Start() {
         this.players.forEach((player) => {
             this.matchEmitter.emit(
-                matchEmitterMTypes.tellDetaills,
+                matchEmitterMTypes.tellDetails,
                 player,
                 this.players,
                 player == this.white
