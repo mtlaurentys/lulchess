@@ -1,19 +1,14 @@
 # LULChess Server Implementation
 
----
----
-
 ## Documentation
-
----
 
 ![image](server_diagram.png "Diagram")
 
-## 1. API Documentation
+### 1. API Documentation
 
 ---
 
-### Sends
+#### Sends
 
 - `"uID"`, sent when connection is stablished.
 
@@ -50,7 +45,7 @@
 
 ---
 
-### Interprets
+#### Interprets
 
 - `"getPieces"`: The client asks for the pieces available for matches.
 
@@ -73,5 +68,5 @@
 ---
 ---
 
-## 2. Handling Client Requests
+### 2. Handling Client Requests
 
