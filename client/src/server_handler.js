@@ -49,7 +49,6 @@ class ServerHandler {
                 console.log("ID: " + mes.substring(divider, mes.lenght));
                 break;
             default:
-                print(this.callbacks[firstWord]);
                 this.callbacks[firstWord](
                     JSON.parse(mes.substring(divider, mes.lenght))
                 );
