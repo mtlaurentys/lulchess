@@ -3,6 +3,12 @@
 ---
 ---
 
+## Documentation
+
+---
+
+![image](server_diagram.png "Diagram")
+
 ## 1. API Documentation
 
 ---
