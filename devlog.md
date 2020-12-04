@@ -1,5 +1,9 @@
 # DEVLOG
 
+### 04/12/2020
+
+Client displays the initial state of the match
+
 ### 01/12/2020
 
 Added a diagram to server documentation.
