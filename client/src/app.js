@@ -56,7 +56,7 @@ class App extends React.Component {
                         inRoom={this.state.inRoom}
                         serverHandler={this.serverHandler}
                         SetServerCallback={this.state.SetServerCallback}
-                    ></RoomPanel>
+                    />
                     <ActiveRoom
                         serverHandler={this.serverHandler}
                         SetServerCallback={this.state.SetServerCallback}

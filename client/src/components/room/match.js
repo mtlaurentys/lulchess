@@ -2,7 +2,8 @@ import React from "react";
 
 import "./match.css";
 
-const baseBoard = require("../../constants/constants").initialBoard;
+import Board from "./board/board";
+const baseBoard = require("../../constants/constants").baseBoard;
 const print = console.log;
 
 class Match extends React.Component {
@@ -14,11 +15,13 @@ class Match extends React.Component {
             row.forEach((piece) => r.push(piece));
             brd.push(r);
         });
-        this.state = {};
+        this.state = {
+            boardState: brd,
+        };
     }
 
     render() {
-        return <div>GAME</div>;
+        return <Board board={this.state.boardState} />;
     }
 }
 
