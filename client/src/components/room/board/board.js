@@ -15,9 +15,11 @@ class Board extends React.Component {
     }
 
     DrawCell(cell, rowIndex, colIndex) {
+        let k = rowIndex + "-" + colIndex;
         return (
             <Cell
-                key={rowIndex + "-" + colIndex}
+                key={k}
+                cellID={k}
                 row={rowIndex}
                 col={colIndex}
                 piece={cell}

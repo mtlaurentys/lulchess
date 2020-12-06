@@ -14,7 +14,6 @@ class Lobby extends React.Component {
         this.requestRoomUpdate = props.requestUpdate;
         this.TryJoin = props.TryJoin;
         this.SetServerCallback = props.SetServerCallback;
-        print("Initial: " + this.state.rID);
     }
 
     componentDidMount() {
@@ -26,7 +25,7 @@ class Lobby extends React.Component {
     }
 
     renderRoomItem(rID) {
-        if (rID != this.state.rID)
+        if (rID !== this.state.rID)
             return <button onClick={() => this.TryJoin(rID)}>{rID}</button>;
         else
             return (

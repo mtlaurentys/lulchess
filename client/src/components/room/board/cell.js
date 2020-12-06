@@ -1,5 +1,6 @@
 import React from "react";
-
+import { useDrag, dragPreviewImage } from "react-dnd";
+import Piece from "./piece";
 import "./cell.css";
 
 const print = console.log;
@@ -14,6 +15,7 @@ class Cell extends React.Component {
         this.color = (props.row + props.col) % 2 === 0 ? "black" : "white";
         this.leftOffset = props.col * 12.5;
         this.topOffset = props.row * 12.5;
+
         this.RenderPiece = this.RenderPiece.bind(this);
     }
 
@@ -21,11 +23,7 @@ class Cell extends React.Component {
         if (this.state.piece === "") return <></>;
         print(spritesPaths[this.state.piece]);
         return (
-            <img
-                className="piece"
-                src={spritesPaths[this.state.piece]}
-                alt={this.state.piece}
-            />
+            <Piece pieceName={this.state.piece} pieceID={this.props.cellII} />
         );
     }
 
