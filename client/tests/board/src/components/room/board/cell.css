@@ -1,7 +1,6 @@
 .chessSquare {
-    position: absolute;
+    position: relative;
     width: 12.5%;
-    height: 12.5%;
 }
 
 .chessSquare:hover {

@@ -41,7 +41,6 @@ class Board extends React.Component {
     }
 
     MovePiece(pieceID, dest) {
-        print(pieceID);
         let orig = this.state.piecePositions[pieceID];
         let newCellPiece = { ...this.state.cellPiece };
         newCellPiece[orig] = null;
@@ -53,12 +52,9 @@ class Board extends React.Component {
             cellPiece: newCellPiece,
             piecePositions: newPiecePositions,
         });
-        print(this.state.piecePositions);
-        print(this.state.cellPiece);
     }
 
     DrawCell(pieceID, row, col) {
-        print("drawn");
         let k = row + "-" + col;
         return (
             <Cell
@@ -74,7 +70,7 @@ class Board extends React.Component {
 
     render() {
         return (
-            <div id="board">
+            <div id={this.props.ID}>
                 {Object.entries(this.state.cellPiece).map(([pos, pieceID]) => {
                     return this.DrawCell(
                         pieceID,

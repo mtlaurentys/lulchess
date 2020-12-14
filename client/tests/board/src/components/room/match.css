@@ -6,3 +6,30 @@
     height: 100%;
     background-color: bisque;
 }
+
+#board {
+    position: sticky;
+    background-color: coral;
+    margin: 20% 10% 20% 0%;
+    width: 60%;
+    display: inline-block;
+}
+
+#board:after {
+    display: block;
+    content: "";
+    margin-top: 100%; /* initial ratio of 1:1*/
+}
+
+#opponentClock {
+    position: relative;
+    left: 0;
+}
+
+#ownClock {
+    float: right;
+    position: sticky;
+    background-color: green;
+    text-decoration-color: chartreuse;
+    left: 0;
+}

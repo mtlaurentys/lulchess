@@ -3,7 +3,7 @@ import "./clock.css";
 
 class Clock extends React.Component {
     render() {
-        return <></>;
+        return <span id={this.props.ID}>asncvklasdlv</span>;
     }
 }
 
