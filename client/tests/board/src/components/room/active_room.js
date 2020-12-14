@@ -3,9 +3,6 @@ import "./active_room.css";
 
 import Match from "./match";
 
-const print = console.log;
-const util = require("util");
-
 class ActiveRoom extends React.Component {
     constructor(props) {
         super(props);

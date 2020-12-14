@@ -19,17 +19,16 @@ export default function Piece({ pieceName: pieceName, pieceID: pieceID }) {
     return (
         <>
             <DragPreviewImage
-                className="piece"
                 connect={previewConnector}
                 src={spritesPaths[pieceName]}
             />
-            <div ref={dragConnector} style={{ opacity: isDragging ? 0 : 1 }}>
-                <img
-                    className="piece"
-                    src={spritesPaths[pieceName]}
-                    alt={pieceName}
-                />
-            </div>
+            <img
+                ref={dragConnector}
+                style={{ opacity: isDragging ? 0 : 1 }}
+                className="piece"
+                src={spritesPaths[pieceName]}
+                alt={pieceName}
+            />
         </>
     );
 }

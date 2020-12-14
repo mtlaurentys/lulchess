@@ -4,7 +4,6 @@ import "./match.css";
 
 import Board from "./board/board";
 const baseBoard = require("../../constants/constants").baseBoard;
-const print = console.log;
 
 class Match extends React.Component {
     constructor(props) {

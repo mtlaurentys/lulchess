@@ -6,13 +6,8 @@
 import React from "react";
 import "./app.css";
 import ActiveRoom from "./components/room/active_room";
-const print = console.log;
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <React.StrictMode>
