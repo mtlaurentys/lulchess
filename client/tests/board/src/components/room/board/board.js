@@ -9,26 +9,56 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            numRows: props.board.length,
+            numCols: props.board[0].length,
             board: props.board,
-            pieceObjects: {},
+            pieceObjects: {}, // pieceID => piece
+            cellPiece: {}, // position => pieceID || null
+            piecePositions: {}, //pieceID => position
         };
         this.DrawCell = this.DrawCell.bind(this);
-        for (let row = 0; row < this.state.board.length; row++) {
-            for (let col = 0; col < this.state.board[0].length; col++) {
-                const element = this.state.board[row][col];
-                if (this.state.board[row][col] !== "")
+        this.MovePiece = this.MovePiece.bind(this);
+        for (let row = 0; row < props.board.length; row++) {
+            for (let col = 0; col < props.board[0].length; col++) {
+                const element = props.board[row][col];
+                if (props.board[row][col] !== "") {
                     this.state.pieceObjects[[row, col]] = (
                         <Piece
-                            pieceName={this.state.board[row][col]}
+                            key={[row, col]}
+                            pieceName={props.board[row][col]}
                             pieceID={[row, col]}
                         />
                     );
-                else this.state.pieceObjects[[row, col]] = <></>;
+                    this.state.cellPiece[[row, col]] = [row, col];
+                    this.state.piecePositions[[row, col]] = [row, col];
+                } else {
+                    this.state.pieceObjects[[row, col]] = <></>;
+                    this.state.cellPiece[[row, col]] = null;
+                    this.state.piecePositions[[row, col]] = [row, col];
+                }
             }
         }
     }
 
-    DrawCell(cellPiece, row, col) {
+    MovePiece(pieceID, dest) {
+        print(pieceID);
+        let orig = this.state.piecePositions[pieceID];
+        let newCellPiece = { ...this.state.cellPiece };
+        newCellPiece[orig] = null;
+        newCellPiece[dest] = pieceID;
+        let newPiecePositions = { ...this.state.piecePositions };
+        newPiecePositions[pieceID] = dest;
+        //checkmove
+        this.setState({
+            cellPiece: newCellPiece,
+            piecePositions: newPiecePositions,
+        });
+        print(this.state.piecePositions);
+        print(this.state.cellPiece);
+    }
+
+    DrawCell(pieceID, row, col) {
+        print("drawn");
         let k = row + "-" + col;
         return (
             <Cell
@@ -36,7 +66,8 @@ class Board extends React.Component {
                 cellID={k}
                 row={row}
                 col={col}
-                piece={this.state.pieceObjects[[row, col]]}
+                Move={this.MovePiece}
+                piece={this.state.pieceObjects[pieceID]}
             />
         );
     }
@@ -44,10 +75,12 @@ class Board extends React.Component {
     render() {
         return (
             <div id="board">
-                {this.state.board.map((row, rowIndex) => {
-                    return row.map((cell, colIndex) => {
-                        return this.DrawCell(cell, rowIndex, colIndex);
-                    });
+                {Object.entries(this.state.cellPiece).map(([pos, pieceID]) => {
+                    return this.DrawCell(
+                        pieceID,
+                        Number(pos[0]),
+                        Number(pos[2])
+                    );
                 })}
             </div>
         );
