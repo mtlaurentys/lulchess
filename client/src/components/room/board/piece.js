@@ -1,32 +1,37 @@
 import React from "react";
 import { useDrag, dragPreviewImage, DragPreviewImage } from "react-dnd";
 
+import "./piece.css";
+
 const print = console.log;
+const itemTypes = require("../../../constants/constants").itemTypes;
 const spritesPaths = require("../../../constants/constants").spritesPaths;
 
-export default function Piece({ pieceName: pieceName, pieceID: pieceID }) {
-    const [dragProperties, dragConnector, previewConnector] = useDrag({
-        item: { type: "piece", id: pieceID + "-p" },
+const Piece = (props) => {
+    const [{ isDragging }, dragConnector, previewConnector] = useDrag({
+        item: { type: itemTypes.piece, id: props.pieceID },
         collect: (monitor) => {
-            return { isDragging: !!monitor.isDragging() };
+            return {
+                isDragging: !!monitor.isDragging(),
+                previewOptions: { backgroundColor: "purple" },
+            };
         },
     });
-    print(pieceName);
-    print(pieceName);
-    print(spritesPaths[pieceName]);
     return (
         <>
             <DragPreviewImage
                 connect={previewConnector}
-                src={spritesPaths[pieceName]}
+                src={spritesPaths[props.pieceName]}
             />
-            <div ref={dragConnector}>
-                <img
-                    src={spritesPaths[pieceName]}
-                    className="piece"
-                    alt={pieceName}
-                />
-            </div>
+            <img
+                ref={dragConnector}
+                style={{ opacity: isDragging ? 0 : 1 }}
+                className="piece"
+                src={spritesPaths[props.pieceName]}
+                alt={props.pieceName}
+            />
         </>
     );
-}
+};
+
+export default Piece;

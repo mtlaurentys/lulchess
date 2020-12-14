@@ -7,9 +7,3 @@
 .chessSquare:hover {
     background-color: red !important;
 }
-
-.piece {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}

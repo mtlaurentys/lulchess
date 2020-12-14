@@ -34,6 +34,12 @@ const spritesPaths = {
     bp: IM_PATH + "bp" + IM_EXT,
 };
 
+// itemTypes have to be strings (react-dnd requirement)
+const itemTypes = {
+    piece: "0",
+};
+
 define("webSocketsServerPort", 8000);
 define("baseBoard", baseBoard);
 define("spritesPaths", spritesPaths);
+define("itemTypes", itemTypes);

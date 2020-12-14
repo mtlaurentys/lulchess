@@ -3,6 +3,7 @@ import React from "react";
 import "./match.css";
 
 import Board from "./board/board";
+import Clock from "./clock/clock";
 const baseBoard = require("../../constants/constants").baseBoard;
 
 class Match extends React.Component {
@@ -20,7 +21,12 @@ class Match extends React.Component {
     }
 
     render() {
-        return <Board board={this.state.boardState} />;
+        return (
+            <div id="match">
+                <Board board={this.state.boardState} />
+                <Clock />
+            </div>
+        );
     }
 }
 

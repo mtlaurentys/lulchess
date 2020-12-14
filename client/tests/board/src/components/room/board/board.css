@@ -2,7 +2,7 @@
     position: absolute;
     background-color: coral;
     top: 5%;
-    left: 0;
+    right: 1%;
     width: 40%;
     display: inline-block;
 }

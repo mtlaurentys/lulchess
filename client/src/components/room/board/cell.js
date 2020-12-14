@@ -1,48 +1,38 @@
 import React from "react";
-import { useDrag, dragPreviewImage } from "react-dnd";
+import { useDrop } from "react-dnd";
 import Piece from "./piece";
 import "./cell.css";
 
 const print = console.log;
-const spritesPaths = require("../../../constants/constants").spritesPaths;
+const itemTypes = require("../../../constants/constants").itemTypes;
 
-class Cell extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            piece: props.piece,
-        };
-        this.color = (props.row + props.col) % 2 === 0 ? "black" : "white";
-        this.leftOffset = props.col * 12.5;
-        this.topOffset = props.row * 12.5;
+const Cell = (props) => {
+    let color = (props.row + props.col) % 2 === 0 ? "black" : "white";
+    let leftOffset = props.col * 12.5;
+    let topOffset = props.row * 12.5;
 
-        this.RenderPiece = this.RenderPiece.bind(this);
-    }
-
-    RenderPiece() {
-        if (this.state.piece === "") return <></>;
-        print(spritesPaths[this.state.piece]);
-        return (
-            <Piece pieceName={this.state.piece} pieceID={this.props.cellII} />
-        );
-    }
-
-    render() {
-        let pieceElement = this.RenderPiece();
-        return (
-            <div
-                className="chessSquare"
-                style={{
-                    backgroundColor: this.color,
-                    display: "block",
-                    left: this.leftOffset + "%",
-                    top: this.topOffset + "%",
-                }}
-            >
-                {pieceElement}
-            </div>
-        );
-    }
-}
+    const [{ isOver }, drop] = useDrop({
+        accept: itemTypes.piece,
+        drop: (item, monitor) => props.Move(item.id, [props.row, props.col]),
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+        }),
+    });
+    return (
+        <div
+            ref={drop}
+            className="chessSquare"
+            style={{
+                backgroundColor: color,
+                opacity: isOver ? 0.5 : 1,
+                display: "block",
+                left: leftOffset + "%",
+                top: topOffset + "%",
+            }}
+        >
+            {props.piece}
+        </div>
+    );
+};
 
 export default Cell;
