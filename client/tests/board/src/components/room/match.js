@@ -24,8 +24,10 @@ class Match extends React.Component {
         return (
             <div id="match">
                 <Board ID="board" board={this.state.boardState} />
-                <Clock ID="opponentClock" />
-                <Clock ID="ownClock" />
+                <div id="clocks">
+                    <Clock ID="opponentClock" />
+                    <Clock ID="ownClock" />
+                </div>
             </div>
         );
     }

@@ -29,7 +29,9 @@ const Cell = (props) => {
                 left: leftOffset + "%",
                 top: topOffset + "%",
             }}
-        ></div>
+        >
+            {props.piece}
+        </div>
     );
 };
 
