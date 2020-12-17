@@ -1,6 +1,10 @@
 import React from "react";
+
+import { piecesControlKeys } from "../../../constants/constants";
 import Cell from "./cell";
 import Piece from "./piece";
+import pieceRules from "./pieceRules";
+
 import "./board.css";
 
 const print = console.log;
@@ -38,6 +42,7 @@ class Board extends React.Component {
                 }
             }
         }
+        print(pieceRules);
     }
 
     MovePiece(pieceID, dest) {

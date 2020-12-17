@@ -21,7 +21,7 @@ const Cell = (props) => {
     return (
         <div
             ref={drop}
-            className="chessSquare"
+            id="chessSquare"
             style={{
                 backgroundColor: color,
                 opacity: isOver ? 0.5 : 1,

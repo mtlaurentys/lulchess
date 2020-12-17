@@ -78,6 +78,13 @@ class ActiveRoom extends React.Component {
             return (
                 <div className="ActiveRoom">
                     <Match
+                        BroadcastMove={(orig, dest) =>
+                            this.serverHandler.Send("makeMove", {
+                                origin: orig,
+                                destine: dest,
+                            })
+                        }
+                        SetServerCallback={this.SetServerCallback}
                         ids={this.state.playersIds}
                         color={this.state.color}
                     />

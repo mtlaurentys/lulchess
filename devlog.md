@@ -1,5 +1,10 @@
 # DEVLOG
 
+### 17/12/2020
+
+Drag and Drop setted up
+Piece movement is trasnmitted to other player
+
 ### 04/12/2020
 
 Client displays the initial state of the match

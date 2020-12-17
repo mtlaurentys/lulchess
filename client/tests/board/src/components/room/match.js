@@ -4,7 +4,7 @@ import "./match.css";
 
 import Board from "./board/board";
 import Clock from "./clock/clock";
-const baseBoard = require("../../constants/constants").baseBoard;
+import { baseBoard } from "../../constants/constants";
 
 class Match extends React.Component {
     constructor(props) {
@@ -23,7 +23,9 @@ class Match extends React.Component {
     render() {
         return (
             <div id="match">
-                <Board ID="board" board={this.state.boardState} />
+                <div id="boardContainer">
+                    <Board ID="board" board={this.state.boardState} />
+                </div>
                 <div id="clocks">
                     <Clock ID="opponentClock" />
                     <Clock ID="ownClock" />

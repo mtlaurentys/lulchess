@@ -54,9 +54,14 @@ class LCServer {
                 });
             }
         );
+        this.appEmitter.on(appEmitterMTypes.madeMove, (cID, params) =>
+            this.SendMessage("madeMove", cID, params)
+        );
     }
 
     SendMessage(messageType, cID, infoObject) {
+        print("SENT:");
+        print(infoObject);
         if (!this.clients[cID]) return;
         this.clients[cID].send(messageType + " " + JSON.stringify(infoObject));
     }
@@ -94,6 +99,7 @@ class LCServer {
                 break;
             case clientMTypes.createMatch:
             case clientMTypes.tryJoin:
+            case clientMTypes.makeMove:
                 this.appEmitter.emit(appEmitterMTypes[mType], cnID, params);
                 break;
             case clientMTypes.getActiveRooms:

@@ -18,6 +18,7 @@ const clientMTypes = {
     getActiveRooms: 2,
     leaveRoom: 3,
     tryJoin: 4,
+    makeMove: 5,
 };
 
 const appEmitterMTypes = {
@@ -33,6 +34,8 @@ const appEmitterMTypes = {
     userDisconnected: 9,
     startMatch: 10,
     tellDetails: 11,
+    madeMove: 12,
+    makeMove: 13,
 };
 
 const lobbyEmitterMTypes = {
@@ -45,6 +48,8 @@ const lobbyEmitterMTypes = {
 
 const matchEmitterMTypes = {
     tellDetails: 0,
+    makeMove: 1,
+    madeMove: 2,
 };
 
 const roomEmitterMTypes = {
@@ -69,6 +74,17 @@ const createMatchFields = [
     "fixedPowers",
 ];
 
+const baseBoard = [
+    ["br", "bn", "bb", "bq", "bk", "bb", "bn", "br"],
+    ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
+    ["wr", "wn", "wb", "wq", "wk", "wb", "wn", "wr"],
+];
+
 define("clientMTypes", clientMTypes);
 define("lobbyEmitterMTypes", lobbyEmitterMTypes);
 define("createRoomErrors", createRoomErrors);
@@ -76,4 +92,5 @@ define("createMatchFields", createMatchFields);
 define("appEmitterMTypes", appEmitterMTypes);
 define("roomEmitterMTypes", roomEmitterMTypes);
 define("matchEmitterMTypes", matchEmitterMTypes);
+define("baseBoard", baseBoard);
 define("webSocketsServerPort", 8000);

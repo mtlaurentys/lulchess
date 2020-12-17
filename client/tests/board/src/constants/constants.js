@@ -38,7 +38,12 @@ const itemTypes = {
     piece: "0",
 };
 
+const piecesControlKeys = {
+    wp: "whitePawn",
+};
+
 define("webSocketsServerPort", 8000);
 define("baseBoard", baseBoard);
 define("spritesPaths", spritesPaths);
 define("itemTypes", itemTypes);
+define("piecesControlkeys", piecesControlKeys);

@@ -3,8 +3,8 @@ import React from "react";
 import "./match.css";
 
 import Board from "./board/board";
+import Clock from "./clock/clock";
 const baseBoard = require("../../constants/constants").baseBoard;
-const print = console.log;
 
 class Match extends React.Component {
     constructor(props) {
@@ -18,10 +18,24 @@ class Match extends React.Component {
         this.state = {
             boardState: brd,
         };
+        this.SetServerCallback = props.SetServerCallback;
     }
 
     render() {
-        return <Board board={this.state.boardState} />;
+        return (
+            <div id="match">
+                <Board
+                    BroadcastMove={this.props.BroadcastMove}
+                    SetServerCallback={this.SetServerCallback}
+                    ID="board"
+                    board={this.state.boardState}
+                />
+                <div id="clocks">
+                    <Clock ID="opponentClock" />
+                    <Clock ID="ownClock" />
+                </div>
+            </div>
+        );
     }
 }
 

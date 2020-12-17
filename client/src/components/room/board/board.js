@@ -18,6 +18,8 @@ class Board extends React.Component {
         };
         this.DrawCell = this.DrawCell.bind(this);
         this.MovePiece = this.MovePiece.bind(this);
+        this.OpponentMovePiece = this.OpponentMovePiece.bind(this);
+        this.OwnMovePiece = this.OwnMovePiece.bind(this);
         for (let row = 0; row < props.board.length; row++) {
             for (let col = 0; col < props.board[0].length; col++) {
                 const element = props.board[row][col];
@@ -38,27 +40,43 @@ class Board extends React.Component {
                 }
             }
         }
+        this.SetServerCallback = props.SetServerCallback;
+    }
+
+    componentDidMount() {
+        this.SetServerCallback("madeMove", this.OpponentMovePiece);
+    }
+
+    OpponentMovePiece(params) {
+        let pID = this.state.cellPiece[[params.origin]];
+        if (pID == null) {
+            print("Board state is incorrect");
+            // TODO: Why would it happen? Should it fix the state?
+        }
+        this.MovePiece(pID, params.destine);
+    }
+
+    OwnMovePiece(pieceID, dest) {
+        let orig = this.state.piecePositions[pieceID];
+        this.MovePiece(pieceID, dest);
+        this.props.BroadcastMove(orig, dest);
     }
 
     MovePiece(pieceID, dest) {
-        print(pieceID);
         let orig = this.state.piecePositions[pieceID];
         let newCellPiece = { ...this.state.cellPiece };
         newCellPiece[orig] = null;
         newCellPiece[dest] = pieceID;
         let newPiecePositions = { ...this.state.piecePositions };
         newPiecePositions[pieceID] = dest;
-        //checkmove
+        // TODO: check if move is valid
         this.setState({
             cellPiece: newCellPiece,
             piecePositions: newPiecePositions,
         });
-        print(this.state.piecePositions);
-        print(this.state.cellPiece);
     }
 
     DrawCell(pieceID, row, col) {
-        print("drawn");
         let k = row + "-" + col;
         return (
             <Cell
@@ -66,7 +84,7 @@ class Board extends React.Component {
                 cellID={k}
                 row={row}
                 col={col}
-                Move={this.MovePiece}
+                Move={this.OwnMovePiece}
                 piece={this.state.pieceObjects[pieceID]}
             />
         );
@@ -74,7 +92,7 @@ class Board extends React.Component {
 
     render() {
         return (
-            <div id="board">
+            <div id={this.props.ID}>
                 {Object.entries(this.state.cellPiece).map(([pos, pieceID]) => {
                     return this.DrawCell(
                         pieceID,

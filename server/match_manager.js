@@ -8,7 +8,6 @@ const EventEmitter = require("events");
 
 const appEmitterMTypes = require("./constants").appEmitterMTypes;
 const matchEmitterMTypes = require("./constants").matchEmitterMTypes;
-
 const print = console.log;
 
 class MatchManager {
@@ -18,8 +17,10 @@ class MatchManager {
         this.players = {}; // matchEm -> list of players in match
 
         this.StartMatch = this.StartMatch.bind(this);
+        this.MakeMove = this.MakeMove.bind(this);
 
         this.appEmitter.on(appEmitterMTypes.startMatch, this.StartMatch);
+        this.appEmitter.on(appEmitterMTypes.makeMove, this.MakeMove);
     }
 
     StartMatch(match) {
@@ -33,9 +34,29 @@ class MatchManager {
                 color
             );
         });
+        mEm.on(matchEmitterMTypes.madeMove, (uID, orig, dest) => {
+            print("EMITIU PRO SERVER HANDLER");
+            this.appEmitter.emit(appEmitterMTypes.madeMove, uID, {
+                origin: orig,
+                destine: dest,
+            });
+        });
         this.players[mEm] = players;
         players.forEach((p) => (this.matches[p] = mEm));
         match.Start();
+    }
+
+    MakeMove(uID, params) {
+        print("params:" + params);
+        if (params.origin && params.destine) {
+            print("entrou");
+            this.matches[uID].emit(
+                matchEmitterMTypes.makeMove,
+                uID,
+                params["origin"],
+                params["destine"]
+            );
+        } else print("Invalid movement signature. Client Bug.");
     }
 }
 
