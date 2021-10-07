@@ -3,7 +3,6 @@ import React from "react";
 import { piecesControlKeys } from "../../../constants/constants";
 import Cell from "./cell";
 import Piece from "./piece";
-import pieceRules from "./pieceRules";
 
 import "./board.css";
 
@@ -18,7 +17,7 @@ class Board extends React.Component {
             board: props.board,
             pieceObjects: {}, // pieceID => piece
             cellPiece: {}, // position => pieceID || null
-            piecePositions: {}, //pieceID => position
+            piecePositions: {}, // pieceID => position
         };
         this.DrawCell = this.DrawCell.bind(this);
         this.MovePiece = this.MovePiece.bind(this);
@@ -42,7 +41,6 @@ class Board extends React.Component {
                 }
             }
         }
-        print(pieceRules);
     }
 
     MovePiece(pieceID, dest) {
